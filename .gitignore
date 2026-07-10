@@ -22,3 +22,22 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Build output
+target/
+build/
+dist/
+.gradle/
+
+# Node
+node_modules/
+.next/
+
+# Python
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+
+# IDE
+.idea/
