@@ -1,0 +1,28 @@
+.gitignore
+  s_1a20fe3f5d2531::t_061dc07f7e94b5 25-40
+  s_d7363afc61c467::t_bbfea94e04353f 41-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.11",
+  "base_commit_sha": "bef7f38600132b4d58e3a1c8ae581e055979226a",
+  "prompts": {},
+  "sessions": {
+    "s_1a20fe3f5d2531": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "98401943-57c1-47b6-81f6-7e42d76f9668",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    },
+    "s_d7363afc61c467": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "439ff7e0-8c6f-4ef3-bc5e-604f099bcc79",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
