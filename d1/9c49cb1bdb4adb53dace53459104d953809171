@@ -1,0 +1,72 @@
+pocs/go-istio-auth0/internal/config/config.go
+  s_fb078f47d2847f::t_64af8f56b61a1a 1-24
+pocs/go-istio-auth0/internal/handler/book_handler.go
+  s_fb078f47d2847f::t_5b63a232923004 1-108
+pocs/go-istio-auth0/deploy/deployment.yaml
+  s_fb078f47d2847f::t_c1db3f12242b8d 1-56
+pocs/go-istio-auth0/go.mod
+  s_fb078f47d2847f::t_869526c311ef4a 1-3
+  s_fb078f47d2847f::t_cf9392d2dc6fc5 4-47
+pocs/go-istio-auth0/internal/db/db.go
+  s_fb078f47d2847f::t_79ce9c46cacfb8 1-30
+pocs/go-istio-auth0/stop.sh
+  s_fb078f47d2847f::t_f53c35e0bc039e 1-11
+pocs/go-istio-auth0/internal/router/router_test.go
+  s_fb078f47d2847f::t_c1bad26abed857 1-77
+pocs/go-istio-auth0/deploy/namespace.yaml
+  s_fb078f47d2847f::t_0fd34ceedd57e3 1-6
+pocs/go-istio-auth0/internal/middleware/auth.go
+  s_fb078f47d2847f::t_fd89be4726f9ba 1-19
+pocs/go-istio-auth0/internal/models/book.go
+  s_fb078f47d2847f::t_7ddc3c7347a8a0 1-18
+pocs/go-istio-auth0/internal/repository/book_repository_test.go
+  s_fb078f47d2847f::t_cd9f3954feee2d 1-82
+pocs/go-istio-auth0/internal/router/router.go
+  s_fb078f47d2847f::t_f866baab7eb86b 1-17,32-48
+  s_fb078f47d2847f::t_ef58ee2080ba3e 18-31
+pocs/go-istio-auth0/start.sh
+  s_fb078f47d2847f::t_89871c13608f25 1-23
+pocs/go-istio-auth0/test.sh
+  s_fb078f47d2847f::t_8bed929e76350d 1-38
+pocs/go-istio-auth0/deploy/requestauthentication.yaml
+  s_fb078f47d2847f::t_3e7ff0b75fb35f 1-18
+pocs/go-istio-auth0/deploy/authorizationpolicy.yaml
+  s_fb078f47d2847f::t_14938c04f293a2 1-19
+  s_fb078f47d2847f::t_3fff0eba4ee0ec 20
+pocs/go-istio-auth0/deploy/gateway.yaml
+  s_fb078f47d2847f::t_eaeeaba68d29a4 1-32
+pocs/go-istio-auth0/printscreens/architecture.svg
+  s_fb078f47d2847f::t_506508f89d209d 33-36
+  s_fb078f47d2847f::t_76ca523676d4a7 1-19,22-32,37-45,47-53,55-56
+  s_fb078f47d2847f::t_cd83dd5d94740f 20-21
+  s_fb078f47d2847f::t_473fb5808f67cc 46,54
+pocs/go-istio-auth0/README.md
+  s_fb078f47d2847f::t_c8d16cc4ed24c1 36
+  s_fb078f47d2847f::t_0f2195cf1a6dac 1-35,37-176
+pocs/go-istio-auth0/cmd/server/main.go
+  s_fb078f47d2847f::t_5d167e7ceeec3a 1-32
+pocs/go-istio-auth0/.gitignore
+  s_fb078f47d2847f::t_516f3243a8c68f 1-4
+pocs/go-istio-auth0/Containerfile
+  s_fb078f47d2847f::t_2e80bd566c1e71 1-12
+pocs/go-istio-auth0/internal/repository/book_repository.go
+  s_fb078f47d2847f::t_9591caec0d2f02 1-72
+pocs/go-istio-auth0/go.sum
+  s_fb078f47d2847f::t_3649f43eb02928 1-135
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "d19c49cb1bdb4adb53dace53459104d953809171",
+  "prompts": {},
+  "sessions": {
+    "s_fb078f47d2847f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "556f967e-60c5-46a1-9fed-6069254d9097",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
