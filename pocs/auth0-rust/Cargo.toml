@@ -4,6 +4,12 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.94"
 license = "MIT"
+description = "Rust client for the Auth0 Authentication API and Management API"
+repository = "https://github.com/diegopacheco/sec-playground"
+documentation = "https://docs.rs/auth0-rust"
+readme = "README.md"
+keywords = ["auth0", "oauth2", "openid-connect", "authentication"]
+categories = ["authentication", "api-bindings", "web-programming"]
 
 [lib]
 name = "auth0_rust"
@@ -16,3 +22,4 @@ reqwest = { version = "0.12.28", default-features = false, features = ["blocking
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.150"
 url = "2.5.8"
+tokio = { version = "1.49.0", features = ["rt-multi-thread", "time"] }

@@ -1,6 +1,7 @@
 use crate::error::Auth0Error;
 use reqwest::Proxy;
 use std::collections::HashSet;
+use std::sync::{Arc, OnceLock};
 use std::time::Duration;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -44,14 +45,31 @@ pub enum LogLevel {
 pub struct LoggingOptions {
     pub level: LogLevel,
     pub headers_to_redact: HashSet<String>,
+    pub redact_body: bool,
 }
 
 impl LoggingOptions {
     pub fn new(level: LogLevel) -> Self {
+        let headers_to_redact = [
+            "authorization",
+            "cookie",
+            "proxy-authorization",
+            "set-cookie",
+            "x-api-key",
+        ]
+        .into_iter()
+        .map(str::to_string)
+        .collect();
         Self {
             level,
-            headers_to_redact: HashSet::new(),
+            headers_to_redact,
+            redact_body: true,
         }
+    }
+
+    pub fn include_sensitive_bodies(mut self, value: bool) -> Self {
+        self.redact_body = !value;
+        self
     }
 
     pub fn redact_header(mut self, header: impl Into<String>) -> Self {
@@ -78,6 +96,14 @@ impl LoggingOptions {
             value.into()
         }
     }
+
+    pub fn body_value(&self, value: impl Into<String>) -> String {
+        if self.redact_body {
+            "[redacted]".into()
+        } else {
+            value.into()
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -85,6 +111,9 @@ pub struct RetryOptions {
     pub max_retries: usize,
     pub retry_statuses: Vec<u16>,
     pub respect_retry_after: bool,
+    pub retry_non_idempotent: bool,
+    pub base_delay: Duration,
+    pub max_delay: Duration,
 }
 
 impl RetryOptions {
@@ -93,6 +122,9 @@ impl RetryOptions {
             max_retries,
             retry_statuses: vec![429, 500, 502, 503, 504],
             respect_retry_after: true,
+            retry_non_idempotent: false,
+            base_delay: Duration::from_millis(200),
+            max_delay: Duration::from_secs(5),
         }
     }
 
@@ -106,6 +138,21 @@ impl RetryOptions {
         self
     }
 
+    pub fn retry_non_idempotent(mut self, value: bool) -> Self {
+        self.retry_non_idempotent = value;
+        self
+    }
+
+    pub fn base_delay(mut self, value: Duration) -> Self {
+        self.base_delay = value;
+        self
+    }
+
+    pub fn max_delay(mut self, value: Duration) -> Self {
+        self.max_delay = value;
+        self
+    }
+
     pub fn should_retry(&self, status: u16) -> bool {
         self.retry_statuses.contains(&status)
     }
@@ -113,7 +160,9 @@ impl RetryOptions {
 
 #[derive(Clone)]
 pub struct ClientOptions {
-    pub blocking_client: reqwest::blocking::Client,
+    blocking_client: Arc<OnceLock<Result<reqwest::blocking::Client, String>>>,
+    blocking_timeout: Option<Duration>,
+    blocking_proxy: Option<ProxyOptions>,
     pub async_client: reqwest::Client,
     pub timeout: Option<Duration>,
     pub retry: RetryOptions,
@@ -123,6 +172,41 @@ pub struct ClientOptions {
 impl ClientOptions {
     pub fn builder() -> ClientOptionsBuilder {
         ClientOptionsBuilder::new()
+    }
+
+    pub fn blocking_client(&self) -> Result<&reqwest::blocking::Client, Auth0Error> {
+        if tokio::runtime::Handle::try_current().is_ok() {
+            return Err(Auth0Error::InvalidInput(
+                "blocking execution is unavailable inside an async runtime".into(),
+            ));
+        }
+        self.blocking_client
+            .get_or_init(|| {
+                let mut builder = reqwest::blocking::Client::builder();
+                if let Some(timeout) = self.blocking_timeout {
+                    builder = builder.timeout(timeout);
+                }
+                if let Some(proxy) = &self.blocking_proxy {
+                    builder = builder.proxy(proxy.to_proxy().map_err(|value| value.to_string())?);
+                }
+                builder.build().map_err(|value| value.to_string())
+            })
+            .as_ref()
+            .map_err(|value| Auth0Error::Transport(value.clone()))
+    }
+}
+
+impl Drop for ClientOptions {
+    fn drop(&mut self) {
+        if let Some(value) = Arc::get_mut(&mut self.blocking_client)
+            && let Some(Ok(client)) = value.take()
+        {
+            if tokio::runtime::Handle::try_current().is_ok() {
+                std::thread::spawn(move || drop(client));
+                return;
+            }
+            drop(client);
+        }
     }
 }
 
@@ -184,19 +268,12 @@ impl ClientOptionsBuilder {
     }
 
     pub fn build(self) -> Result<ClientOptions, Auth0Error> {
-        let blocking_client = match self.blocking_client {
-            Some(value) => value,
-            None => {
-                let mut builder = reqwest::blocking::Client::builder();
-                if let Some(timeout) = self.timeout {
-                    builder = builder.timeout(timeout);
-                }
-                if let Some(proxy) = &self.proxy {
-                    builder = builder.proxy(proxy.to_proxy()?);
-                }
-                builder.build()?
-            }
-        };
+        let blocking_client = Arc::new(OnceLock::new());
+        if let Some(value) = self.blocking_client {
+            blocking_client
+                .set(Ok(value))
+                .map_err(|_| Auth0Error::Transport("blocking client configuration".into()))?;
+        }
         let async_client = match self.async_client {
             Some(value) => value,
             None => {
@@ -212,6 +289,8 @@ impl ClientOptionsBuilder {
         };
         Ok(ClientOptions {
             blocking_client,
+            blocking_timeout: self.timeout,
+            blocking_proxy: self.proxy,
             async_client,
             timeout: self.timeout,
             retry: self.retry,
@@ -223,5 +302,32 @@ impl ClientOptionsBuilder {
 impl Default for ClientOptionsBuilder {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn logging_redacts_sensitive_values_by_default() {
+        let logging = LoggingOptions::new(LogLevel::Body);
+
+        assert_eq!(
+            logging.redact_value("Authorization", "Bearer token"),
+            "[redacted]"
+        );
+        assert_eq!(
+            logging.redact_value("cookie", "session=value"),
+            "[redacted]"
+        );
+        assert_eq!(logging.body_value("client_secret=value"), "[redacted]");
+    }
+
+    #[test]
+    fn sensitive_body_logging_requires_explicit_opt_in() {
+        let logging = LoggingOptions::new(LogLevel::Body).include_sensitive_bodies(true);
+
+        assert_eq!(logging.body_value("value"), "value");
     }
 }

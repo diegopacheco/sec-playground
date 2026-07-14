@@ -1,3 +1,4 @@
+use crate::assertion::RsaClientAssertionSigner;
 use crate::client::{ClientOptions, LogLevel, RetryOptions};
 use crate::error::{ApiError, Auth0Error};
 use serde::de::DeserializeOwned;
@@ -36,6 +37,17 @@ impl Method {
             Method::Delete => reqwest::Method::DELETE,
         }
     }
+
+    fn is_idempotent(self) -> bool {
+        matches!(self, Method::Get | Method::Put | Method::Delete)
+    }
+}
+
+#[derive(Debug, Clone)]
+struct DynamicClientAssertion {
+    signer: RsaClientAssertionSigner,
+    issuer: String,
+    subject: String,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -133,6 +145,7 @@ pub struct Request {
     query: Vec<(String, String)>,
     body: Body,
     timeout: Option<Duration>,
+    client_assertion: Option<DynamicClientAssertion>,
 }
 
 impl Request {
@@ -144,6 +157,7 @@ impl Request {
             query: Vec::new(),
             body: Body::Empty,
             timeout: None,
+            client_assertion: None,
         }
     }
 
@@ -221,6 +235,20 @@ impl Request {
         self
     }
 
+    pub(crate) fn client_assertion(
+        mut self,
+        signer: RsaClientAssertionSigner,
+        issuer: impl Into<String>,
+        subject: impl Into<String>,
+    ) -> Self {
+        self.client_assertion = Some(DynamicClientAssertion {
+            signer,
+            issuer: issuer.into(),
+            subject: subject.into(),
+        });
+        self
+    }
+
     pub fn prepared(&self) -> PreparedRequest {
         let mut url = self.url.clone();
         if !self.query.is_empty() {
@@ -250,15 +278,23 @@ impl Request {
     pub fn execute_with_options(&self, options: &ClientOptions) -> Result<ApiResponse, Auth0Error> {
         let mut attempt = 0;
         loop {
-            let prepared = self.prepared();
+            let prepared = self.prepare_for_execution()?;
             log_request(options, &prepared);
-            let response = send_blocking(&options.blocking_client, &prepared)?;
-            log_response(options, &response);
-            if should_retry(&options.retry, attempt, response.status) {
-                attempt += 1;
-                if let Some(delay) = retry_delay(&options.retry, &response.headers) {
+            let response = match send_blocking(options.blocking_client()?, &prepared) {
+                Ok(value) => value,
+                Err(_) if should_retry_transport(&options.retry, attempt, prepared.method) => {
+                    let delay = retry_delay(&options.retry, &HashMap::new(), attempt);
+                    attempt += 1;
                     thread::sleep(delay);
+                    continue;
                 }
+                Err(value) => return Err(value),
+            };
+            log_response(options, &response);
+            if should_retry_status(&options.retry, attempt, prepared.method, response.status) {
+                let delay = retry_delay(&options.retry, &response.headers, attempt);
+                attempt += 1;
+                thread::sleep(delay);
                 continue;
             }
             return response.into_result();
@@ -289,15 +325,23 @@ impl Request {
     ) -> Result<ApiResponse, Auth0Error> {
         let mut attempt = 0;
         loop {
-            let prepared = self.prepared();
+            let prepared = self.prepare_for_execution()?;
             log_request(options, &prepared);
-            let response = send_async(&options.async_client, &prepared).await?;
-            log_response(options, &response);
-            if should_retry(&options.retry, attempt, response.status) {
-                attempt += 1;
-                if let Some(delay) = retry_delay(&options.retry, &response.headers) {
-                    thread::sleep(delay);
+            let response = match send_async(&options.async_client, &prepared).await {
+                Ok(value) => value,
+                Err(_) if should_retry_transport(&options.retry, attempt, prepared.method) => {
+                    let delay = retry_delay(&options.retry, &HashMap::new(), attempt);
+                    attempt += 1;
+                    tokio::time::sleep(delay).await;
+                    continue;
                 }
+                Err(value) => return Err(value),
+            };
+            log_response(options, &response);
+            if should_retry_status(&options.retry, attempt, prepared.method, response.status) {
+                let delay = retry_delay(&options.retry, &response.headers, attempt);
+                attempt += 1;
+                tokio::time::sleep(delay).await;
                 continue;
             }
             return response.into_result();
@@ -310,6 +354,35 @@ impl Request {
     ) -> Result<T, Auth0Error> {
         let response = self.execute_async_with_options(options).await?;
         decode_json(response)
+    }
+
+    fn prepare_for_execution(&self) -> Result<PreparedRequest, Auth0Error> {
+        let mut prepared = self.prepared();
+        if let Some(assertion) = &self.client_assertion {
+            let value = assertion.signer.sign(
+                assertion.issuer.clone(),
+                prepared.url.clone(),
+                assertion.subject.clone(),
+            )?;
+            match &mut prepared.body {
+                Body::Form(values) => {
+                    values.retain(|(key, _)| {
+                        key != "client_assertion" && key != "client_assertion_type"
+                    });
+                    values.push(("client_assertion".into(), value));
+                    values.push((
+                        "client_assertion_type".into(),
+                        "urn:ietf:params:oauth:client-assertion-type:jwt-bearer".into(),
+                    ));
+                }
+                _ => {
+                    return Err(Auth0Error::InvalidInput(
+                        "client assertion requires a form request".into(),
+                    ));
+                }
+            }
+        }
+        Ok(prepared)
     }
 }
 
@@ -399,14 +472,14 @@ fn read_blocking_response(
     let status = response.status().as_u16();
     let headers = header_map(response.headers());
     let text = response.text()?;
-    Ok(api_response(status, headers, text)?)
+    api_response(status, headers, text)
 }
 
 async fn read_async_response(response: reqwest::Response) -> Result<ApiResponse, Auth0Error> {
     let status = response.status().as_u16();
     let headers = header_map(response.headers());
     let text = response.text().await?;
-    Ok(api_response(status, headers, text)?)
+    api_response(status, headers, text)
 }
 
 fn header_map(headers: &reqwest::header::HeaderMap) -> HashMap<String, String> {
@@ -445,20 +518,34 @@ fn decode_json<T: DeserializeOwned>(response: ApiResponse) -> Result<T, Auth0Err
     }
 }
 
-fn should_retry(retry: &RetryOptions, attempt: usize, status: u16) -> bool {
-    attempt < retry.max_retries && retry.should_retry(status)
+fn should_retry_status(retry: &RetryOptions, attempt: usize, method: Method, status: u16) -> bool {
+    attempt < retry.max_retries
+        && retry.should_retry(status)
+        && (method.is_idempotent() || retry.retry_non_idempotent)
 }
 
-fn retry_delay(retry: &RetryOptions, headers: &HashMap<String, String>) -> Option<Duration> {
-    if !retry.respect_retry_after {
-        return Some(Duration::from_millis(0));
+fn should_retry_transport(retry: &RetryOptions, attempt: usize, method: Method) -> bool {
+    attempt < retry.max_retries && (method.is_idempotent() || retry.retry_non_idempotent)
+}
+
+fn retry_delay(
+    retry: &RetryOptions,
+    headers: &HashMap<String, String>,
+    attempt: usize,
+) -> Duration {
+    if retry.respect_retry_after
+        && let Some(value) = headers
+            .get("retry-after")
+            .or_else(|| headers.get("Retry-After"))
+            .and_then(|value| value.parse::<u64>().ok())
+    {
+        return Duration::from_secs(value).min(retry.max_delay);
     }
-    headers
-        .get("retry-after")
-        .or_else(|| headers.get("Retry-After"))
-        .and_then(|value| value.parse::<u64>().ok())
-        .map(Duration::from_secs)
-        .or(Some(Duration::from_millis(0)))
+    let multiplier = 1u32.checked_shl(attempt.min(31) as u32).unwrap_or(u32::MAX);
+    retry
+        .base_delay
+        .saturating_mul(multiplier)
+        .min(retry.max_delay)
 }
 
 fn log_request(options: &ClientOptions, prepared: &PreparedRequest) {
@@ -471,7 +558,10 @@ fn log_request(options: &ClientOptions, prepared: &PreparedRequest) {
                 eprintln!("{}: {}", key, options.logging.redact_value(key, value));
             }
             if matches!(options.logging.level, LogLevel::Body) {
-                eprintln!("{:?}", prepared.body);
+                eprintln!(
+                    "{}",
+                    options.logging.body_value(format!("{:?}", prepared.body))
+                );
             }
         }
     }
@@ -487,7 +577,7 @@ fn log_response(options: &ClientOptions, response: &ApiResponse) {
                 eprintln!("{}: {}", key, options.logging.redact_value(key, value));
             }
             if matches!(options.logging.level, LogLevel::Body) {
-                eprintln!("{}", response.text);
+                eprintln!("{}", options.logging.body_value(&response.text));
             }
         }
     }
@@ -528,5 +618,28 @@ pub fn parse_api_error(status: u16, body: &str) -> ApiError {
         code,
         message,
         body: body.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn retries_idempotent_methods_only_by_default() {
+        let retry = RetryOptions::new(1);
+
+        assert!(should_retry_status(&retry, 0, Method::Get, 503));
+        assert!(should_retry_transport(&retry, 0, Method::Delete));
+        assert!(!should_retry_status(&retry, 0, Method::Post, 503));
+        assert!(!should_retry_transport(&retry, 0, Method::Patch));
+    }
+
+    #[test]
+    fn retry_delay_is_bounded() {
+        let retry = RetryOptions::new(1).max_delay(Duration::from_secs(2));
+        let headers = HashMap::from([("retry-after".into(), "60".into())]);
+
+        assert_eq!(retry_delay(&retry, &headers, 0), Duration::from_secs(2));
     }
 }

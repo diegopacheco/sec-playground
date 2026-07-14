@@ -96,6 +96,8 @@ pub enum Auth0Error {
     MissingEndpoint(String),
     MissingPathParameter(String),
     MissingAccessToken,
+    MissingTokenExpiry,
+    TokenCache,
     Http(ApiError),
     Transport(String),
     Json(String),
@@ -111,6 +113,8 @@ impl fmt::Display for Auth0Error {
                 write!(f, "missing path parameter: {}", value)
             }
             Auth0Error::MissingAccessToken => write!(f, "missing access token"),
+            Auth0Error::MissingTokenExpiry => write!(f, "missing token expiry"),
+            Auth0Error::TokenCache => write!(f, "token cache unavailable"),
             Auth0Error::Http(value) => write!(f, "http error {}: {}", value.status, value.body),
             Auth0Error::Transport(value) => write!(f, "transport error: {}", value),
             Auth0Error::Json(value) => write!(f, "json error: {}", value),

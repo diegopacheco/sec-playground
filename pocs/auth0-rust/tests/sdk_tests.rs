@@ -14,6 +14,13 @@ fn auth_domain_defaults_to_https() {
 }
 
 #[test]
+fn auth_rejects_insecure_remote_domains() {
+    let result = AuthApi::builder("http://tenant.auth0.com", "client").build();
+
+    assert!(result.is_err());
+}
+
+#[test]
 fn authorize_url_contains_expected_parameters() {
     let auth = AuthApi::builder("tenant.auth0.com", "client")
         .build()
@@ -56,6 +63,55 @@ fn passwordless_email_builds_json_body() {
             "send": "code",
             "authParams": {"scope": "openid"}
         }))
+    );
+}
+
+#[test]
+fn mfa_token_exchanges_build_expected_forms() {
+    let auth = AuthApi::builder("tenant.auth0.com", "client")
+        .client_secret("secret")
+        .build()
+        .unwrap();
+    let otp = auth.exchange_mfa_otp("mfa-token", "123456").prepared();
+    let recovery = auth
+        .exchange_mfa_recovery_code("mfa-token", "recovery-code")
+        .prepared();
+
+    assert_eq!(otp.method, Method::Post);
+    assert!(
+        matches!(otp.body, Body::Form(ref values) if values.contains(&(
+            "grant_type".into(),
+            "http://auth0.com/oauth/grant-type/mfa-otp".into()
+        )))
+    );
+    assert!(
+        matches!(recovery.body, Body::Form(ref values) if values.contains(&(
+            "recovery_code".into(),
+            "recovery-code".into()
+        )))
+    );
+}
+
+#[test]
+fn client_assertion_authentication_does_not_send_a_client_secret() {
+    let auth = AuthApi::builder("tenant.auth0.com", "client")
+        .client_secret("secret")
+        .client_assertion("assertion")
+        .build()
+        .unwrap();
+    let request = auth.request_token("https://api.local").prepared();
+
+    let Body::Form(values) = request.body else {
+        panic!("expected form");
+    };
+    assert!(
+        values
+            .iter()
+            .any(|(key, value)| key == "client_assertion" && value == "assertion")
+    );
+    assert!(
+        !values.iter().any(|(key, _)| key == "client_secret"),
+        "{values:?}"
     );
 }
 

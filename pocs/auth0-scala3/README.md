@@ -13,6 +13,21 @@ This wrapper adds:
 
 This artifact is not an official Auth0 SDK. The wrapped Java dependency is the supported SDK.
 
+## Status
+
+This wrapper is usable for server-side Scala 3 applications that want small Scala adapters over the official Java SDK. Management API calls retain the synchronous behavior of the Java SDK.
+
+## What Is Missing
+
+* `Future` adapters for synchronous Management API operations
+* Standard test discovery and structured test reporting; the current build runs a standalone test entry point
+* Explicit return types on the public wrapper surface for stronger API compatibility
+* HTTP-level tests for error mapping, retries, and automatic token renewal
+* Session creation, callback processing, state and nonce verification, cookie handling, and JWT validation
+* Scala-native models and Management API method signatures independent of the Java SDK
+
+The wrapper intentionally remains thin. Use `java` or `use` whenever the Scala surface does not expose an operation directly.
+
 ## Authentication
 
 ```scala

@@ -87,30 +87,33 @@ let request = mgmt
 
 `ClientOptions` configures proxy, logging, retry, timeout, and custom reqwest clients. Pass it to `AuthApiBuilder::client_options` or `ManagementApiBuilder::client_options`.
 
-## What Is Still Not 100%
+Sensitive headers and bodies are redacted by default. Body logging requires an explicit `include_sensitive_bodies(true)` opt-in. Retries use bounded exponential backoff, honor numeric `Retry-After` values, and retry only idempotent methods unless `retry_non_idempotent(true)` is selected.
 
-This crate is broad and builds, but it is not a byte-for-byte or class-for-class Rust port of the Java SDK. Known gaps:
+## Production Behavior
 
-- Management API models are nominal wrappers around `serde_json::Value`, not fully field-typed Rust structs for every property in every Java DTO.
-- Management API methods are one per route, but their parameters are provided through `path_param`, `query`, `body`, and `multipart` builders instead of strongly typed Rust method parameters for every route.
-- Generated Management API operation names are flattened snake case names, not nested client structs for every Java package path.
-- Java overloads are represented by builder methods and suffixed generated route methods where routes collide, not by overloaded functions because Rust does not support overloads.
-- Async support exists for request execution, but automatic Management API client-credentials token acquisition still uses the shared synchronous token cache path.
-- RSA client assertion signing supports RS256 and RS384 from PEM keys, but it does not expose every Java key object construction path.
-- Proxy support maps to reqwest proxy URLs and basic auth, not Java `Proxy` objects.
-- Logging support writes through simple stderr logging, not OkHttp interceptor-compatible logging.
-- Custom HTTP client injection accepts reqwest blocking and async clients, not arbitrary user-defined transport traits.
-- Retry support retries selected HTTP status codes and can respect `Retry-After`, but it does not clone Java interceptor internals exactly.
-- Rate-limit parity is limited to retry behavior and error structs; it does not expose Java token quota helper classes as stateful objects.
-- Pagination supports offset paging from common Auth0 response shapes, but it is not generated per endpoint with route-specific item types.
-- Multipart support accepts in-memory parts; it does not yet provide file-path convenience helpers.
-- Auth API typed responses cover the common Java auth response classes, but not every nested field is strongly typed.
-- Auth API request builders cover the Java Authentication API operations inspected from `AuthAPI`, but method naming is Rust-style and not Java-style.
-- Request options support headers, query parameters, and timeout; they do not model every Java request option object one-to-one.
-- HTTP status error structs exist for the Java Management API status classes, but endpoint-specific error body schemas are not field-typed.
-- Tests include route coverage, request construction, Java auth fixture decoding, multipart, request options, and error mapping, but they do not replicate the full Java wire test suite.
-- The endpoint catalog was generated from Java raw client source parsing, not from the original Fern/OpenAPI source.
-- The crate does not include publishing metadata parity with the Java project.
+- Auth0 domains require HTTPS. Plain HTTP is accepted only for loopback test servers.
+- RSA client assertions are signed for each execution and each retry.
+- Automatic Management API tokens use `expires_in`, refresh early, and refresh once after a `401` response.
+- Automatic token acquisition uses async transport in async execution paths.
+- SDK clients can be created and dropped safely inside async runtimes.
+- MFA OTP, OOB, and recovery-code token exchanges are available.
+- `AuthApi::execute_json` and `AuthApi::execute_json_async` decode directly into typed response structs.
+
+## Remaining Limitations
+
+- Management API models are wrappers around `serde_json::Value`, not field-typed Rust structs.
+- Management API parameters use `path_param`, `query`, `body`, and `multipart` builders instead of route-specific typed signatures.
+- Generated operation names are flattened snake case names instead of nested resource clients.
+- The endpoint catalog comes from Java raw client source parsing rather than the Auth0 Fern source.
+- Endpoint-specific error response bodies are not field-typed.
+- Authentication response structs cover common fields but leave many nested fields as flexible JSON.
+- Client assertion signing supports PEM RSA keys with RS256 and RS384 only.
+- Custom HTTP clients are Reqwest clients rather than transport traits.
+- `Retry-After` HTTP dates are not parsed; numeric seconds are supported.
+- Pagination is offset-based and not generated with route-specific item types.
+- Multipart parts are in memory and do not include file-path helpers.
+- The crate does not create application sessions, process callbacks, verify state or nonce values, manage cookies, or validate JWT signatures and claims.
+- Tests use loopback HTTP servers and local request fixtures rather than a live Auth0 tenant.
 
 ## Tests
 
@@ -118,4 +121,6 @@ Run:
 
 ```bash
 cargo test
+cargo clippy --all-targets -- -D warnings
+cargo doc --no-deps
 ```

@@ -1,7 +1,10 @@
 use crate::error::Auth0Error;
 use jsonwebtoken::{Algorithm, EncodingKey, Header};
 use serde::Serialize;
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
+
+static ASSERTION_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum RsaSigningAlgorithm {
@@ -55,11 +58,7 @@ impl RsaClientAssertionSigner {
             sub: subject.into(),
             iat: now,
             exp: now + 180,
-            jti: format!(
-                "{}-{}",
-                now,
-                SystemTime::now().elapsed().unwrap_or_default().as_nanos()
-            ),
+            jti: next_jti()?,
         };
         let algorithm = match self.algorithm {
             RsaSigningAlgorithm::Rsa256 => Algorithm::RS256,
@@ -70,6 +69,15 @@ impl RsaClientAssertionSigner {
     }
 }
 
+fn next_jti() -> Result<String, Auth0Error> {
+    let sequence = ASSERTION_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+    let nanos = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_err(|value| Auth0Error::InvalidInput(value.to_string()))?
+        .as_nanos();
+    Ok(format!("{}-{}-{}", std::process::id(), nanos, sequence))
+}
+
 #[derive(Debug, Serialize)]
 struct ClientAssertionClaims {
     iss: String,
@@ -78,4 +86,17 @@ struct ClientAssertionClaims {
     iat: u64,
     exp: u64,
     jti: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn assertion_identifiers_are_unique() {
+        assert_ne!(
+            next_jti().expect("first identifier"),
+            next_jti().expect("second identifier")
+        );
+    }
 }

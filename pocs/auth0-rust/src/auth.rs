@@ -2,6 +2,7 @@ use crate::assertion::RsaClientAssertionSigner;
 use crate::client::ClientOptions;
 use crate::error::Auth0Error;
 use crate::request::{ApiResponse, Method, Request};
+use serde::de::DeserializeOwned;
 use serde_json::{Value, json};
 use url::Url;
 
@@ -64,20 +65,12 @@ impl AuthApiBuilder {
 
     pub fn build(self) -> Result<AuthApi, Auth0Error> {
         let base_url = normalize_domain(&self.domain)?;
-        let client_assertion = match (self.client_assertion, self.client_assertion_signer) {
-            (Some(value), _) => Some(value),
-            (None, Some(signer)) => Some(signer.sign(
-                self.client_id.clone(),
-                base_url.join("oauth/token")?.to_string(),
-                self.client_id.clone(),
-            )?),
-            (None, None) => None,
-        };
-        AuthApi::new_with_options(
+        AuthApi::new_with_signer(
             base_url,
             self.client_id,
             self.client_secret,
-            client_assertion,
+            self.client_assertion,
+            self.client_assertion_signer,
             self.client_options,
         )
     }
@@ -89,6 +82,7 @@ pub struct AuthApi {
     client_id: String,
     client_secret: Option<String>,
     client_assertion: Option<String>,
+    client_assertion_signer: Option<RsaClientAssertionSigner>,
     client_options: ClientOptions,
 }
 
@@ -119,11 +113,30 @@ impl AuthApi {
         client_assertion: Option<String>,
         client_options: ClientOptions,
     ) -> Result<Self, Auth0Error> {
+        Self::new_with_signer(
+            base_url,
+            client_id,
+            client_secret,
+            client_assertion,
+            None,
+            client_options,
+        )
+    }
+
+    fn new_with_signer(
+        base_url: Url,
+        client_id: String,
+        client_secret: Option<String>,
+        client_assertion: Option<String>,
+        client_assertion_signer: Option<RsaClientAssertionSigner>,
+        client_options: ClientOptions,
+    ) -> Result<Self, Auth0Error> {
         Ok(Self {
             base_url,
             client_id,
             client_secret,
             client_assertion,
+            client_assertion_signer,
             client_options,
         })
     }
@@ -536,6 +549,63 @@ impl AuthApi {
         self.mfa_challenge(mfa_token, challenge_type)
     }
 
+    pub fn mfa_challenge_with_authenticator(
+        &self,
+        mfa_token: impl Into<String>,
+        challenge_type: impl Into<String>,
+        authenticator_id: impl Into<String>,
+    ) -> Request {
+        self.mfa_challenge(mfa_token, challenge_type)
+            .json_insert("authenticator_id", Value::String(authenticator_id.into()))
+    }
+
+    pub fn exchange_mfa_otp(
+        &self,
+        mfa_token: impl Into<String>,
+        otp: impl Into<String>,
+    ) -> Request {
+        let mut form = self.client_auth_form();
+        form.push((
+            "grant_type".into(),
+            "http://auth0.com/oauth/grant-type/mfa-otp".into(),
+        ));
+        form.push(("mfa_token".into(), mfa_token.into()));
+        form.push(("otp".into(), otp.into()));
+        self.form_request(Method::Post, "oauth/token", form)
+    }
+
+    pub fn exchange_mfa_oob(
+        &self,
+        mfa_token: impl Into<String>,
+        oob_code: impl Into<String>,
+        binding_code: impl Into<String>,
+    ) -> Request {
+        let mut form = self.client_auth_form();
+        form.push((
+            "grant_type".into(),
+            "http://auth0.com/oauth/grant-type/mfa-oob".into(),
+        ));
+        form.push(("mfa_token".into(), mfa_token.into()));
+        form.push(("oob_code".into(), oob_code.into()));
+        form.push(("binding_code".into(), binding_code.into()));
+        self.form_request(Method::Post, "oauth/token", form)
+    }
+
+    pub fn exchange_mfa_recovery_code(
+        &self,
+        mfa_token: impl Into<String>,
+        recovery_code: impl Into<String>,
+    ) -> Request {
+        let mut form = self.client_auth_form();
+        form.push((
+            "grant_type".into(),
+            "http://auth0.com/oauth/grant-type/mfa-recovery-code".into(),
+        ));
+        form.push(("mfa_token".into(), mfa_token.into()));
+        form.push(("recovery_code".into(), recovery_code.into()));
+        self.form_request(Method::Post, "oauth/token", form)
+    }
+
     pub fn add_otp_authenticator(&self, mfa_token: impl Into<String>) -> Request {
         self.request(Method::Post, "mfa/associate").json(json!({
             "client_id": self.client_id,
@@ -575,9 +645,22 @@ impl AuthApi {
         request.execute_with_options(&self.client_options)
     }
 
+    pub fn execute_json<T: DeserializeOwned>(&self, request: &Request) -> Result<T, Auth0Error> {
+        request.execute_json_with_options(&self.client_options)
+    }
+
     pub async fn execute_async(&self, request: &Request) -> Result<ApiResponse, Auth0Error> {
         request
             .execute_async_with_options(&self.client_options)
+            .await
+    }
+
+    pub async fn execute_json_async<T: DeserializeOwned>(
+        &self,
+        request: &Request,
+    ) -> Result<T, Auth0Error> {
+        request
+            .execute_json_async_with_options(&self.client_options)
             .await
     }
 
@@ -591,12 +674,26 @@ impl AuthApi {
         path: impl AsRef<str>,
         form: Vec<(String, String)>,
     ) -> Request {
-        self.request(method, path).form(form)
+        let request = self.request(method, path).form(form);
+        if self.client_assertion.is_none()
+            && let Some(signer) = &self.client_assertion_signer
+        {
+            return request.client_assertion(
+                signer.clone(),
+                self.client_id.clone(),
+                self.client_id.clone(),
+            );
+        }
+        request
     }
 
     fn client_auth_form(&self) -> Vec<(String, String)> {
         let mut form = vec![("client_id".into(), self.client_id.clone())];
-        if let Some(value) = &self.client_secret {
+        let client_secret = self
+            .client_secret
+            .as_ref()
+            .filter(|_| self.client_assertion.is_none() && self.client_assertion_signer.is_none());
+        if let Some(value) = client_secret {
             form.push(("client_secret".into(), value.clone()));
         }
         if let Some(value) = &self.client_assertion {
@@ -754,7 +851,31 @@ pub fn normalize_domain(domain: &str) -> Result<Url, Auth0Error> {
     } else {
         format!("https://{}", domain)
     };
-    Ok(Url::parse(&value)?)
+    let mut url = Url::parse(&value)?;
+    let host = url
+        .host_str()
+        .ok_or_else(|| Auth0Error::InvalidInput("domain host".into()))?;
+    let loopback =
+        host == "localhost" || host == "127.0.0.1" || host == "::1" || host.ends_with(".localhost");
+    if url.scheme() != "https" && !(url.scheme() == "http" && loopback) {
+        return Err(Auth0Error::InvalidInput("domain must use HTTPS".into()));
+    }
+    if !url.username().is_empty()
+        || url.password().is_some()
+        || url.query().is_some()
+        || url.fragment().is_some()
+    {
+        return Err(Auth0Error::InvalidInput(
+            "domain contains unsupported URL parts".into(),
+        ));
+    }
+    if url.path() != "/" && !url.path().is_empty() {
+        return Err(Auth0Error::InvalidInput(
+            "domain must not contain a path".into(),
+        ));
+    }
+    url.set_path("/");
+    Ok(url)
 }
 
 fn encode(value: &str) -> String {

@@ -1,4 +1,3 @@
-use crate::auth::AuthApi;
 use crate::client::ClientOptions;
 use crate::error::Auth0Error;
 use crate::generated::{Endpoint, MANAGEMENT_ENDPOINTS};
@@ -10,7 +9,14 @@ use serde_json::Value;
 use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::sync::Mutex;
+use std::time::{Duration, Instant};
 use url::Url;
+
+#[derive(Clone)]
+struct CachedToken {
+    value: String,
+    expires_at: Instant,
+}
 
 pub struct ManagementApiBuilder {
     domain: Option<String>,
@@ -83,7 +89,7 @@ pub struct ManagementApi {
     client_id: Option<String>,
     client_secret: Option<String>,
     client_options: ClientOptions,
-    token_cache: Mutex<Option<String>>,
+    token_cache: Mutex<Option<CachedToken>>,
 }
 
 impl ManagementApi {
@@ -168,12 +174,44 @@ impl ManagementApi {
         if let Some(value) = &self.token {
             return Ok(value.clone());
         }
-        {
-            let guard = self.token_cache.lock().unwrap();
-            if let Some(value) = guard.as_ref() {
-                return Ok(value.clone());
-            }
+        if let Some(value) = self.cached_access_token()? {
+            return Ok(value);
         }
+        let response = self
+            .token_request()?
+            .execute_with_options(&self.client_options)?;
+        self.cache_token(response.body)
+    }
+
+    async fn access_token_async(&self) -> Result<String, Auth0Error> {
+        if let Some(value) = &self.token {
+            return Ok(value.clone());
+        }
+        if let Some(value) = self.cached_access_token()? {
+            return Ok(value);
+        }
+        let response = self
+            .token_request()?
+            .execute_async_with_options(&self.client_options)
+            .await?;
+        self.cache_token(response.body)
+    }
+
+    fn cached_access_token(&self) -> Result<Option<String>, Auth0Error> {
+        let mut guard = self
+            .token_cache
+            .lock()
+            .map_err(|_| Auth0Error::TokenCache)?;
+        if let Some(value) = guard.as_ref()
+            && value.expires_at > Instant::now()
+        {
+            return Ok(Some(value.value.clone()));
+        }
+        *guard = None;
+        Ok(None)
+    }
+
+    fn token_request(&self) -> Result<Request, Auth0Error> {
         let client_id = self
             .client_id
             .clone()
@@ -182,31 +220,49 @@ impl ManagementApi {
             .client_secret
             .clone()
             .ok_or(Auth0Error::MissingAccessToken)?;
-        let auth = AuthApi::builder(&self.domain, client_id)
-            .client_secret(client_secret)
-            .client_options(self.client_options.clone())
-            .build()?;
-        let audience = format!(
-            "{}/api/v2/",
-            crate::auth::normalize_domain(&self.domain)?
-                .as_str()
-                .trim_end_matches('/')
-        );
-        let response = auth
-            .request_token(audience)
-            .execute_with_options(&self.client_options)?;
-        let token = response
-            .body
-            .and_then(|value| {
-                value
-                    .get("access_token")
-                    .and_then(Value::as_str)
-                    .map(str::to_string)
-            })
+        let base_url = crate::auth::normalize_domain(&self.domain)?;
+        let audience = format!("{}/api/v2/", base_url.as_str().trim_end_matches('/'));
+        Ok(
+            Request::new(Method::Post, base_url.join("oauth/token")?).form(vec![
+                ("client_id".into(), client_id),
+                ("client_secret".into(), client_secret),
+                ("grant_type".into(), "client_credentials".into()),
+                ("audience".into(), audience),
+            ]),
+        )
+    }
+
+    fn cache_token(&self, body: Option<Value>) -> Result<String, Auth0Error> {
+        let value = body.ok_or(Auth0Error::MissingAccessToken)?;
+        let token = value
+            .get("access_token")
+            .and_then(Value::as_str)
+            .map(str::to_string)
             .ok_or(Auth0Error::MissingAccessToken)?;
-        let mut guard = self.token_cache.lock().unwrap();
-        *guard = Some(token.clone());
+        let expires_in = value
+            .get("expires_in")
+            .and_then(Value::as_u64)
+            .ok_or(Auth0Error::MissingTokenExpiry)?;
+        let refresh_margin = (expires_in / 10).min(60);
+        let expires_at = Instant::now() + Duration::from_secs(expires_in - refresh_margin);
+        let mut guard = self
+            .token_cache
+            .lock()
+            .map_err(|_| Auth0Error::TokenCache)?;
+        *guard = Some(CachedToken {
+            value: token.clone(),
+            expires_at,
+        });
         Ok(token)
+    }
+
+    fn invalidate_token(&self) -> Result<(), Auth0Error> {
+        let mut guard = self
+            .token_cache
+            .lock()
+            .map_err(|_| Auth0Error::TokenCache)?;
+        *guard = None;
+        Ok(())
     }
 }
 
@@ -313,9 +369,18 @@ impl<'a> ManagementRequest<'a> {
     }
 
     pub fn execute(&self) -> Result<ApiResponse, Auth0Error> {
-        self.to_request()?
+        let request = self.to_request()?;
+        let result = request
+            .clone()
             .bearer(self.api.access_token()?)
-            .execute_with_options(&self.api.client_options)
+            .execute_with_options(&self.api.client_options);
+        if self.api.token.is_none() && is_unauthorized(&result) {
+            self.api.invalidate_token()?;
+            return request
+                .bearer(self.api.access_token()?)
+                .execute_with_options(&self.api.client_options);
+        }
+        result
     }
 
     pub fn execute_json<T: DeserializeOwned>(&self) -> Result<T, Auth0Error> {
@@ -323,10 +388,20 @@ impl<'a> ManagementRequest<'a> {
     }
 
     pub async fn execute_async(&self) -> Result<ApiResponse, Auth0Error> {
-        self.to_request()?
-            .bearer(self.api.access_token()?)
+        let request = self.to_request()?;
+        let result = request
+            .clone()
+            .bearer(self.api.access_token_async().await?)
             .execute_async_with_options(&self.api.client_options)
-            .await
+            .await;
+        if self.api.token.is_none() && is_unauthorized(&result) {
+            self.api.invalidate_token()?;
+            return request
+                .bearer(self.api.access_token_async().await?)
+                .execute_async_with_options(&self.api.client_options)
+                .await;
+        }
+        result
     }
 
     pub async fn execute_json_async<T: DeserializeOwned>(&self) -> Result<T, Auth0Error> {
@@ -427,10 +502,10 @@ fn page_items<T: DeserializeOwned>(body: Option<Value>) -> Result<Vec<T>, Auth0E
     if value.is_array() {
         return Ok(serde_json::from_value(value)?);
     }
-    if let Some(items) = value.get("items").or_else(|| value.get("data")) {
-        if items.is_array() {
-            return Ok(serde_json::from_value(items.clone())?);
-        }
+    if let Some(items) = value.get("items").or_else(|| value.get("data"))
+        && items.is_array()
+    {
+        return Ok(serde_json::from_value(items.clone())?);
     }
     if let Some(object) = value.as_object() {
         for value in object.values() {
@@ -440,6 +515,10 @@ fn page_items<T: DeserializeOwned>(body: Option<Value>) -> Result<Vec<T>, Auth0E
         }
     }
     Ok(Vec::new())
+}
+
+fn is_unauthorized(result: &Result<ApiResponse, Auth0Error>) -> bool {
+    matches!(result, Err(Auth0Error::Http(value)) if value.status == 401)
 }
 
 trait IntoOk<T> {
@@ -480,7 +559,7 @@ impl Endpoint {
     }
 
     pub fn allows_query(&self, key: &str) -> bool {
-        self.query.iter().any(|value| *value == key)
+        self.query.contains(&key)
     }
 
     pub fn is_write(&self) -> bool {
@@ -488,5 +567,48 @@ impl Endpoint {
             self.method,
             Method::Post | Method::Put | Method::Patch | Method::Delete
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    fn api() -> ManagementApi {
+        ManagementApi::builder()
+            .domain("tenant.auth0.com")
+            .client_credentials("client", "secret")
+            .build()
+            .expect("management client")
+    }
+
+    #[test]
+    fn cached_tokens_expire() {
+        let api = api();
+
+        api.cache_token(Some(json!({
+            "access_token": "expired",
+            "expires_in": 0
+        })))
+        .expect("cached token");
+
+        assert_eq!(api.cached_access_token().expect("token cache"), None);
+    }
+
+    #[test]
+    fn cached_tokens_refresh_early() {
+        let api = api();
+
+        api.cache_token(Some(json!({
+            "access_token": "active",
+            "expires_in": 3600
+        })))
+        .expect("cached token");
+
+        assert_eq!(
+            api.cached_access_token().expect("token cache").as_deref(),
+            Some("active")
+        );
     }
 }

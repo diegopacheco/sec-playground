@@ -13,6 +13,20 @@ This wrapper adds:
 
 This artifact is not an official Auth0 SDK. The wrapped Java dependency is the supported SDK.
 
+## Status
+
+This wrapper is usable for server-side Kotlin applications that want Kotlin configuration blocks and coroutine adapters for Authentication API requests. Management API calls retain the synchronous behavior of the Java SDK.
+
+## What Is Missing
+
+* Coroutine adapters for synchronous Management API operations
+* HTTP-level tests for cancellation, error mapping, retries, and automatic token renewal
+* Compatibility with running Gradle directly on Java 25; use Java 17 for the current Gradle wrapper
+* Session creation, callback processing, state and nonce verification, cookie handling, and JWT validation
+* Kotlin-native models and Management API method signatures independent of the Java SDK
+
+The wrapper intentionally remains thin. Use `java` or `use` whenever the Kotlin surface does not expose an operation directly.
+
 ## Authentication
 
 ```kotlin
