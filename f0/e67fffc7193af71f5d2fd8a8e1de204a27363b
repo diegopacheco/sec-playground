@@ -1,0 +1,19 @@
+pocs/webauthn-passkeys-go/README.md
+  s_83c8f01c982bfa::t_366f956eb18c06 7-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "f0e67fffc7193af71f5d2fd8a8e1de204a27363b",
+  "prompts": {},
+  "sessions": {
+    "s_83c8f01c982bfa": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f62de-36a7-7940-95e2-5ee9ef3dc18b",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
