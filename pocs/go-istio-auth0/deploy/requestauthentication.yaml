@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: book-service-auth0
+  namespace: book-service
+spec:
+  selector:
+    matchLabels:
+      app: book-service
+  jwtRules:
+    - issuer: "https://YOUR_TENANT.us.auth0.com/"
+      jwksUri: "https://YOUR_TENANT.us.auth0.com/.well-known/jwks.json"
+      audiences:
+        - "https://book-service.api"
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "X-Auth-User"
+          claim: "sub"

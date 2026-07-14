@@ -1,0 +1,4 @@
+bin/
+books.db
+server.log
+server.pid
