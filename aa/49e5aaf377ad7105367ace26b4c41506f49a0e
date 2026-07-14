@@ -1,0 +1,76 @@
+pocs/go-istio-keycloak/Containerfile
+  h_8e2c3875396153 1-12
+pocs/go-istio-keycloak/go.mod
+  s_fb078f47d2847f::t_1e81677d8f8f99 1-47
+pocs/go-istio-keycloak/go.sum
+  s_fb078f47d2847f::t_23f861a237ce5a 1-135
+pocs/go-istio-keycloak/start.sh
+  s_fb078f47d2847f::t_7e5baa523d2f3a 1-23
+pocs/go-istio-keycloak/stop.sh
+  s_fb078f47d2847f::t_31e943cba7eacf 1-11
+pocs/go-istio-keycloak/.gitignore
+  s_fb078f47d2847f::t_4d08e6e7162b97 1-6
+pocs/go-istio-keycloak/README.md
+  s_fb078f47d2847f::t_04885a450d41ff 1-224
+pocs/go-istio-keycloak/cmd/server/main.go
+  s_fb078f47d2847f::t_b00eac927c63a7 1-32
+pocs/go-istio-keycloak/create.sh
+  s_fb078f47d2847f::t_3779267eed474a 1-56
+pocs/go-istio-keycloak/deploy/authorizationpolicy.yaml
+  s_fb078f47d2847f::t_7e86d2e4b1fb86 1-20
+pocs/go-istio-keycloak/deploy/deployment.yaml
+  s_fb078f47d2847f::t_7526ccd2297da7 1-57
+pocs/go-istio-keycloak/deploy/gateway.yaml
+  s_fb078f47d2847f::t_a8d5f73ac00f26 1-32
+pocs/go-istio-keycloak/deploy/keycloak.yaml
+  s_fb078f47d2847f::t_adbb64acb31f40 1-59
+pocs/go-istio-keycloak/deploy/namespace.yaml
+  s_fb078f47d2847f::t_aefa6a1f7f2df8 1-6
+pocs/go-istio-keycloak/deploy/requestauthentication.yaml
+  s_fb078f47d2847f::t_840516de813880 1-18
+pocs/go-istio-keycloak/destroy.sh
+  s_fb078f47d2847f::t_fa13d714177771 1-10
+pocs/go-istio-keycloak/internal/config/config.go
+  s_fb078f47d2847f::t_db3733545f6fb1 1-24
+pocs/go-istio-keycloak/internal/db/db.go
+  s_fb078f47d2847f::t_bf8e875e0bbd7e 1-30
+pocs/go-istio-keycloak/internal/handler/book_handler.go
+  s_fb078f47d2847f::t_9f027391920eb4 1-108
+pocs/go-istio-keycloak/internal/middleware/auth.go
+  s_fb078f47d2847f::t_f412d2ab847e97 1-19
+pocs/go-istio-keycloak/internal/models/book.go
+  s_fb078f47d2847f::t_ecaca4710424fc 1-18
+pocs/go-istio-keycloak/internal/repository/book_repository.go
+  s_fb078f47d2847f::t_6db6eda7a2b6cb 1-72
+pocs/go-istio-keycloak/internal/repository/book_repository_test.go
+  s_fb078f47d2847f::t_5412dfc11b66b0 1-82
+pocs/go-istio-keycloak/internal/router/router.go
+  s_fb078f47d2847f::t_91c7ff8a30ebd3 1-48
+pocs/go-istio-keycloak/internal/router/router_test.go
+  s_fb078f47d2847f::t_a6630785413e26 1-77
+pocs/go-istio-keycloak/printscreens/architecture.svg
+  s_fb078f47d2847f::t_1a88fad199ff2e 1-57
+pocs/go-istio-keycloak/test.sh
+  s_fb078f47d2847f::t_b9b318441b0f63 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "aa49e5aaf377ad7105367ace26b4c41506f49a0e",
+  "prompts": {},
+  "humans": {
+    "h_8e2c3875396153": {
+      "author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_fb078f47d2847f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "556f967e-60c5-46a1-9fed-6069254d9097",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
