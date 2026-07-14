@@ -1,0 +1,21 @@
+pocs/webauthn-passkeys-go/go.mod
+  s_158c6d23bf926d::t_7a776afc5e048c 1-8
+pocs/webauthn-passkeys-go/go.sum
+  s_158c6d23bf926d::t_554179c27f1cba 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "93a45bdcd27c35770de7cecfb40b5560a6d432b0",
+  "prompts": {},
+  "sessions": {
+    "s_158c6d23bf926d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6290-2c93-7622-af7a-7defcb38fb7e",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
