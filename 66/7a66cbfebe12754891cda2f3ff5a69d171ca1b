@@ -1,0 +1,89 @@
+pocs/auth0-kotlin/.gitignore
+  s_158c6d23bf926d::t_77d5c8c7bdc77d 1-20
+pocs/auth0-kotlin/README.md
+  s_158c6d23bf926d::t_4d8111421c6cc1 1-63
+pocs/auth0-kotlin/build.gradle.kts
+  s_158c6d23bf926d::t_c8389dff6d0e2c 1-50
+pocs/auth0-kotlin/gradle.properties
+  s_158c6d23bf926d::t_961597a46c2921 1-2
+pocs/auth0-kotlin/gradle/wrapper/gradle-wrapper.properties
+  s_158c6d23bf926d::t_19fd65622aaea2 1-7
+pocs/auth0-kotlin/gradlew
+  s_158c6d23bf926d::t_e5984a571f7d81 1-8
+pocs/auth0-kotlin/gradlew.bat
+  s_a56480f550dec1::t_ad91a83c280d77 1-5
+pocs/auth0-kotlin/settings.gradle.kts
+  s_158c6d23bf926d::t_8269dcb9eae08f 1-22
+pocs/auth0-kotlin/src/main/kotlin/com/auth0/kotlin/Auth0.kt
+  s_a56480f550dec1::t_26062e76d84059 1-417
+pocs/auth0-kotlin/src/test/kotlin/com/auth0/kotlin/Auth0Test.kt
+  s_a56480f550dec1::t_84c229312f97d1 1-168
+pocs/auth0-rust/.gitignore
+  s_a56480f550dec1::t_93d34c31698899 1-11
+pocs/auth0-rust/Cargo.lock
+  s_a56480f550dec1::t_b32a47f46a09c4 1-1413
+pocs/auth0-rust/Cargo.toml
+  s_a56480f550dec1::t_53fd654fa73bd4 1-18
+pocs/auth0-rust/README.md
+  s_a56480f550dec1::t_873d42f74650de 1-121
+pocs/auth0-rust/src/assertion.rs
+  s_a56480f550dec1::t_79da4d41c2c8ed 1-81
+pocs/auth0-rust/src/auth.rs
+  s_a56480f550dec1::t_c382bb5fd557c8 1-762
+pocs/auth0-rust/src/auth_types.rs
+  s_a56480f550dec1::t_ad665aa96521a5 1-133
+pocs/auth0-rust/src/client.rs
+  s_a56480f550dec1::t_8e5d1509ccaf74 1-227
+pocs/auth0-rust/src/error.rs
+  s_a56480f550dec1::t_69e9c5aefd8865 1-140
+pocs/auth0-rust/src/generated.rs
+  s_a56480f550dec1::t_5a0edf2558149f 1-4057
+pocs/auth0-rust/src/generated_methods.rs
+  s_a56480f550dec1::t_b50a67fc4d1e3a 1-2946
+pocs/auth0-rust/src/lib.rs
+  s_a56480f550dec1::t_16641c70b96af1 1-37
+pocs/auth0-rust/src/management.rs
+  s_a56480f550dec1::t_3e61ad5c8b0046 1-492
+pocs/auth0-rust/src/models.rs
+  s_a56480f550dec1::t_0a483e02ec0a94 1-2549
+pocs/auth0-rust/src/request.rs
+  s_a56480f550dec1::t_1c1c177d5cd85e 1-532
+pocs/auth0-rust/tests/sdk_tests.rs
+  s_a56480f550dec1::t_31fb070af0147c 1-244
+pocs/auth0-scala3/.gitignore
+  s_a56480f550dec1::t_012f51f3d01f25 1-17
+pocs/auth0-scala3/README.md
+  s_a56480f550dec1::t_a995617bd98211 1-61
+pocs/auth0-scala3/build.sbt
+  s_a56480f550dec1::t_dc18e9ad831894 1-15
+pocs/auth0-scala3/project/build.properties
+  s_a56480f550dec1::t_71a9e3da2b7c38 1
+pocs/auth0-scala3/src/main/scala/auth0scala3/Auth0.scala
+  s_a56480f550dec1::t_c853b9c50da875 1-906
+pocs/auth0-scala3/src/test/scala/auth0scala3/Auth0Spec.scala
+  s_a56480f550dec1::t_46880a5f47b1c5 1-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "667a66cbfebe12754891cda2f3ff5a69d171ca1b",
+  "prompts": {},
+  "sessions": {
+    "s_158c6d23bf926d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6290-2c93-7622-af7a-7defcb38fb7e",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    },
+    "s_a56480f550dec1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f628a-028d-78f3-bb83-dd137c30b0b7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
