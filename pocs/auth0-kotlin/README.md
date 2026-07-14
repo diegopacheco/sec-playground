@@ -1,63 +1,51 @@
-# auth0-kotlin-2x
+# auth0-kotlin
 
-Kotlin SDK layer for Auth0 Java SDK 3.x.
+An idiomatic Kotlin wrapper over the official Auth0 Java SDK 3.10.0.
 
-Generated management clients and generated request and response models remain Java-backed for binary compatibility. The Kotlin layer keeps the full Java SDK reachable and adds Kotlin entry points, endpoint wrappers, coroutine helpers, Jackson Kotlin support, null-safe response helpers, and DSL blocks.
+This artifact does not implement Auth0 protocols. Authentication requests, Management API operations, models, transport, token handling, retries, and errors come from `com.auth0:auth0`.
 
-## Feature parity
+This wrapper adds:
 
-This SDK has full feature access to the Auth0 Java SDK through the Java SDK backend. It does not have 100% Kotlin-native feature parity.
+* Kotlin configuration blocks
+* Typed properties for every top-level Management API client
+* Coroutine adapters for Java SDK requests
+* Direct access to every Java SDK API through `java` and `use`
 
-The remaining gaps are:
+This artifact is not an official Auth0 SDK. The wrapped Java dependency is the supported SDK.
 
-- Endpoint methods are not generated as named Kotlin functions for every operation. Every Java client method is reachable through `call("methodName", ...)`, `request("methodName", ...)`, or the original Java client.
-
-- Nested resources are not all generated as named Kotlin functions. Top-level management resources have Kotlin functions, while nested generated resources are reachable through `resource("resourceName")`.
-
-- Auth operations are not all generated as named Kotlin functions. They are reachable through `request("methodName", ...)`, `call("methodName", ...)`, or the original `AuthAPI`.
-
-- Kotlin nullability is not hand-modeled for every generated Java model property. The Kotlin layer provides non-null and nullable response helpers, but generated model fields remain Java platform types.
-
-- Java tests are not ported line by line to Kotlin. The included Java SDK test suite runs as part of `check`, and the Kotlin layer has parity tests around its own API.
-
-## Kotlin entry points
+## Authentication
 
 ```kotlin
-val auth = Auth0.kotlinAuth("tenant.auth0.com", "client-id", "secret")
+val auth = Auth0.auth("tenant.auth0.com", "client-id", "client-secret")
 
-val loginUrl = auth.authorizeUrl("https://app.test/callback") {
-    withScope("openid profile email")
+val url = auth.authorizationUrl("https://app.test/callback") {
     withAudience("https://api.test")
+    withScope("openid profile email")
 }
 
-val management = Auth0.kotlinManagementWithToken("tenant.auth0.com", "token")
-val users = management.users()
-val roles = users.resource("roles")
+val userInfo = auth.java.userInfo("access-token").awaitBody()
 ```
 
-## Endpoint calls
+## Management API
 
 ```kotlin
-val user = management.users().call<Any>("get", "auth0|123")
-val job = management.jobs().call<Any>("get", "job-id")
+val management = Auth0.managementWithToken("tenant.auth0.com", "access-token")
+val user = management.users.get("auth0|123")
+val roles = management.users.roles()
 ```
 
-## Coroutines
+Automatic client credentials use the Java SDK implementation:
 
 ```kotlin
-val body = auth.request<Any>("userInfo", "access-token").awaitBody()
-val response = auth.request<Any>("userInfo", "access-token").awaitResponse()
-```
-
-## JSON
-
-```kotlin
-val json = Auth0Json.encode(value)
-val value = Auth0Json.decode<MyType>(json)
+val management = Auth0.managementWithClientCredentials(
+    "tenant.auth0.com",
+    "client-id",
+    "client-secret"
+)
 ```
 
 ## Build
 
 ```bash
-JAVA_HOME=/Users/diegopacheco/.sdkman/candidates/java/17.0.16-amzn GRADLE_USER_HOME=/private/tmp/auth0-kotlin-gradle ./gradlew --no-daemon clean build
+./gradlew clean build
 ```

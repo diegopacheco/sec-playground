@@ -13,10 +13,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "auth0-kotlin-2x"
-
-includeBuild("/Users/diegopacheco/git/misc/auth0-java") {
-    dependencySubstitution {
-        substitute(module("com.auth0:auth0")).using(project(":"))
-    }
-}
+rootProject.name = "auth0-kotlin"

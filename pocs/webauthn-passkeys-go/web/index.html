@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Passkey Foundry</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="grain"></div>
+  <main>
+    <header class="masthead">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <p class="eyebrow">WebAuthn security workshop</p>
+        <h1>Passkey<br>Foundry</h1>
+      </div>
+      <div class="standard">
+        <span>W3C</span>
+        <strong>LEVEL 3</strong>
+      </div>
+    </header>
+
+    <section class="stage">
+      <article class="panel registration">
+        <div class="panel-number">01</div>
+        <p class="panel-label">Forge identity</p>
+        <h2>Register a passkey</h2>
+        <p class="panel-copy">Bind this account to a platform authenticator. No password enters the system.</p>
+        <form id="register-form">
+          <label>
+            <span>Username</span>
+            <input id="register-username" name="username" value="diego" autocomplete="username webauthn" required>
+          </label>
+          <label>
+            <span>Display name</span>
+            <input id="display-name" name="displayName" value="Diego" autocomplete="name" required>
+          </label>
+          <button type="submit"><span>Register passkey</span><b>→</b></button>
+        </form>
+      </article>
+
+      <div class="centerpiece" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="key-core">
+          <div class="key-hole"></div>
+        </div>
+        <p>PUBLIC KEY<br>CREDENTIAL</p>
+      </div>
+
+      <article class="panel authentication">
+        <div class="panel-number">02</div>
+        <p class="panel-label">Verify possession</p>
+        <h2>Authenticate</h2>
+        <p class="panel-copy">Release the credential only after local biometric or device PIN verification.</p>
+        <form id="login-form">
+          <label>
+            <span>Username</span>
+            <input id="login-username" name="username" value="diego" autocomplete="username webauthn" required>
+          </label>
+          <button type="submit"><span>Use passkey</span><b>→</b></button>
+        </form>
+      </article>
+    </section>
+
+    <section class="status-board" aria-live="polite">
+      <div class="signal"><i id="signal-light"></i><span id="status">Ready for a ceremony</span></div>
+      <div class="metrics">
+        <span>Accounts <b id="user-count">0</b></span>
+        <span>Credentials <b id="credential-count">0</b></span>
+        <span>Origin <b>localhost</b></span>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

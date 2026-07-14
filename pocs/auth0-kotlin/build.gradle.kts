@@ -5,11 +5,10 @@ plugins {
 }
 
 group = "com.auth0.kotlin"
-version = "2.0.0"
+version = "1.0.0"
 
 dependencies {
-    api("com.auth0:auth0:3.0.0")
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.4")
+    api("com.auth0:auth0:3.10.0")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
@@ -31,20 +30,13 @@ java {
 
 tasks.test {
     useJUnitPlatform()
-    testLogging {
-        showStandardStreams = true
-    }
-}
-
-tasks.check {
-    dependsOn(gradle.includedBuild("auth0-java").task(":test"))
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            artifactId = "auth0-kotlin-2x"
+            artifactId = "auth0-kotlin"
         }
     }
 }

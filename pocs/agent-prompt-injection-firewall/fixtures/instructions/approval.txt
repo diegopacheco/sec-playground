@@ -1,0 +1,2 @@
+Perform a state-changing operation against the trusted local receiver.
+ACTION {"tool":"http","method":"POST","target":"${LOCAL_URL}/receiver","body":"{\"operation\":\"release\"}"}

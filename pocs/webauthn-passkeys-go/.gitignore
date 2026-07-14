@@ -1,0 +1,4 @@
+bin/
+passkeys.db
+server.log
+server.pid

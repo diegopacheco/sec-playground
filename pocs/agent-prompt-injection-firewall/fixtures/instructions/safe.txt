@@ -1,0 +1,3 @@
+Summarize the public security note and check the trusted local receiver.
+ACTION {"tool":"read","target":"public.txt"}
+ACTION {"tool":"http","method":"GET","target":"${LOCAL_URL}/receiver?source=safe"}

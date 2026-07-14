@@ -1,0 +1,4 @@
+audit.jsonl
+bin/
+server.log
+server.pid

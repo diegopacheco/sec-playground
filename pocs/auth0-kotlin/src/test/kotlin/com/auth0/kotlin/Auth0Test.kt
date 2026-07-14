@@ -1,9 +1,9 @@
 package com.auth0.kotlin
 
+import com.auth0.client.auth.AuthAPI
+import com.auth0.client.mgmt.ManagementApi
 import com.auth0.net.Request
 import com.auth0.net.Response
-import java.io.File
-import java.lang.reflect.Modifier
 import java.util.concurrent.CompletableFuture
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -13,131 +13,84 @@ import kotlin.test.assertTrue
 
 class Auth0Test {
     @Test
-    fun buildsAuthClientAndUrls() {
+    fun buildsAuthenticationUrlsWithJavaSdk() {
         val auth = Auth0.auth("tenant.auth0.com", "client-id", "secret")
 
-        val authorizeUrl = auth.authorizeUrlFor("https://app.test/callback") {
+        val authorizationUrl = auth.authorizationUrl("https://app.test/callback") {
             withAudience("https://api.test")
             withScope("openid profile")
             withState("state")
         }
+        val logoutUrl = auth.logoutUrl("https://app.test/out") {
+            useFederated(true)
+        }
 
-        val logoutUrl = auth.logoutUrlFor("https://app.test/out", federated = true)
-
-        assertTrue(authorizeUrl.startsWith("https://tenant.auth0.com/authorize?"))
-        assertTrue(authorizeUrl.contains("client_id=client-id"))
-        assertTrue(authorizeUrl.contains("audience=https%3A%2F%2Fapi.test"))
-        assertTrue(authorizeUrl.contains("scope=openid%20profile"))
+        assertTrue(authorizationUrl.startsWith("https://tenant.auth0.com/authorize?"))
+        assertTrue(authorizationUrl.contains("client_id=client-id"))
+        assertTrue(authorizationUrl.contains("audience=https%3A%2F%2Fapi.test"))
+        assertTrue(authorizationUrl.contains("scope=openid%20profile"))
         assertTrue(logoutUrl.startsWith("https://tenant.auth0.com/v2/logout?"))
         assertTrue(logoutUrl.contains("federated="))
     }
 
     @Test
-    fun buildsManagementClient() {
+    fun exposesOfficialJavaClientsAndModels() {
         val management = Auth0.managementWithToken("tenant.auth0.com", "token") {
-            timeout = 3
-            maxRetries = 1
-            customDomain = "login.test"
+            timeout(3)
+            maxRetries(1)
+            customDomain("login.test")
             header("x-test", "value")
         }
 
-        assertNotNull(management.users())
-        assertNotNull(management.clients())
-        assertNotNull(management.organizations())
+        assertEquals("com.auth0.client.mgmt.UsersClient", management.users.javaClass.name)
+        assertEquals("com.auth0.client.mgmt.ClientsClient", management.clients.javaClass.name)
+        assertEquals("com.auth0.client.mgmt.RateLimitPoliciesClient", management.rateLimitPolicies.javaClass.name)
+        assertEquals("com.auth0.client.mgmt.users.RolesClient", management.users.roles().javaClass.name)
+        assertNotNull(management.organizations)
     }
 
     @Test
-    fun exposesKotlinManagementResources() {
-        val javaNames = com.auth0.client.mgmt.ManagementApi::class.java.methods
-            .filter { it.parameterCount == 0 }
-            .filter { !Modifier.isStatic(it.modifiers) }
-            .filter { it.declaringClass != Object::class.java }
-            .map { it.name }
-            .toSet() - "builder"
+    fun buildsAutomaticClientCredentialsClient() {
+        val management = Auth0.managementWithClientCredentials(
+            "tenant.auth0.com",
+            "client-id",
+            "client-secret"
+        )
 
-        val kotlinNames = KotlinManagementApi::class.java.methods
-            .filter { it.parameterCount <= 1 }
-            .map { it.name }
-            .toSet()
-
-        assertTrue(javaNames.isNotEmpty())
-        assertEquals(emptySet(), javaNames - kotlinNames)
+        assertNotNull(management.users)
     }
 
     @Test
-    fun reachesNestedManagementResources() {
-        val management = Auth0.kotlinManagementWithToken("tenant.auth0.com", "token")
+    fun keepsJavaSdkReachable() {
+        val auth = Auth0.auth("tenant.auth0.com", "client-id")
+        val management = Auth0.managementWithToken("tenant.auth0.com", "token")
 
-        val usersRoles = management.users().resource("roles")
-        val jobsRaw = management.jobs().raw()
-
-        assertEquals("com.auth0.client.mgmt.users.RolesClient", usersRoles.java.javaClass.name)
-        assertEquals("com.auth0.client.mgmt.RawJobsClient", jobsRaw.java.javaClass.name)
+        assertEquals(AuthAPI::class.java, auth.java.javaClass)
+        assertEquals(ManagementApi::class.java, management.java.javaClass)
+        assertNotNull(auth.use { authorizeUrl("https://app.test/callback") })
+        assertNotNull(management.use { users() })
     }
 
     @Test
-    fun mapsRequestResults() {
+    fun adaptsJavaRequestsToKotlin() = runBlocking {
         val request = StaticRequest("body")
-        val response = request.response()
-        val asyncBody = request.bodyAsync().get()
-        val (status, headers, body) = request.execute()
+        val response = request.await()
 
+        assertEquals("body", request.executeBody())
+        assertEquals("body", request.awaitBody())
         assertEquals(200, response.statusCode)
         assertEquals("yes", response.headers["x-ok"])
-        assertEquals("body", response.body)
-        assertEquals("body", asyncBody)
-        assertEquals(200, status)
-        assertEquals("yes", headers["x-ok"])
-        assertEquals("body", body)
     }
 
     @Test
-    fun mapsCoroutineRequestResults() = runBlocking {
-        val request = StaticRequest("body")
-        val response = request.awaitResponse()
-        val body = request.awaitBody()
+    fun wrapsExistingJavaClients() {
+        val javaAuth = AuthAPI.newBuilder("tenant.auth0.com", "client-id").build()
+        val javaManagement = ManagementApi.builder().domain("tenant.auth0.com").token("token").build()
 
-        assertEquals(200, response.statusCode)
-        assertEquals("yes", response.headers["x-ok"])
-        assertEquals("body", response.body)
-        assertEquals("body", body)
-    }
-
-    @Test
-    fun mapsNullableRequestResults() = runBlocking {
-        val request = StaticRequest<String?>(null)
-        val response = request.awaitNullableResponse()
-
-        assertEquals(200, response.statusCode)
-        assertEquals(null, response.body)
-        assertEquals(null, request.nullableBody())
-    }
-
-    @Test
-    fun serializesKotlinDataClasses() {
-        val json = Auth0Json.encode(JsonUser("user-id", "email@test"))
-        val user = Auth0Json.decode<JsonUser>(json)
-
-        assertEquals(JsonUser("user-id", "email@test"), user)
-    }
-
-    @Test
-    fun tracksJavaTestCoverage() {
-        val tests = File("/Users/diegopacheco/git/misc/auth0-java/src/test/java")
-            .walkTopDown()
-            .filter { it.isFile && it.name.endsWith("Test.java") }
-            .toList()
-
-        val testMethods = tests.sumOf { file ->
-            Regex("@Test").findAll(file.readText()).count()
-        }
-
-        assertTrue(tests.size >= 130)
-        assertTrue(testMethods >= 500)
+        assertEquals(javaAuth, javaAuth.asKotlin().java)
+        assertEquals(javaManagement, javaManagement.asKotlin().java)
     }
 }
-
-private data class JsonUser(val id: String, val email: String)
 
 private class StaticRequest<T>(private val value: T) : Request<T> {
     override fun execute(): Response<T> =
