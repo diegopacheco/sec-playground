@@ -1,0 +1,24 @@
+pocs/agent-prompt-injection-firewall/firewall_test.go
+  s_7708080d9e3490::t_f14bce84b7e023 4-6,62-92
+pocs/agent-prompt-injection-firewall/test.sh
+  s_7708080d9e3490::t_f14bce84b7e023 13-17
+pocs/agent-prompt-injection-firewall/main.go
+  s_7708080d9e3490::t_f14bce84b7e023 41,54-76
+  s_7708080d9e3490::t_3e95739e8ca018 77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "abbcc1c10c8887edd8b4c71854b50b400215b245",
+  "prompts": {},
+  "sessions": {
+    "s_7708080d9e3490": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f62cd-ed96-7510-8f2e-ec2e029a304e",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
