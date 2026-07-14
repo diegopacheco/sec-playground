@@ -1,0 +1,20 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: book-service-require-jwt
+  namespace: book-service
+spec:
+  selector:
+    matchLabels:
+      app: book-service
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            requestPrincipals: ["*"]
+      to:
+        - operation:
+            paths: ["/api/*"]
+    - to:
+        - operation:
+            paths: ["/health", "/"]

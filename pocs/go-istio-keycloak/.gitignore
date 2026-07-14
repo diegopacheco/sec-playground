@@ -1,0 +1,6 @@
+bin/
+books.db
+server.log
+server.pid
+book-service.tar
+istio-*/

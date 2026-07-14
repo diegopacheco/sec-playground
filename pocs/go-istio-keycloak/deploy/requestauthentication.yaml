@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: book-service-keycloak
+  namespace: book-service
+spec:
+  selector:
+    matchLabels:
+      app: book-service
+  jwtRules:
+    - issuer: "http://localhost:8081/realms/books"
+      jwksUri: "http://keycloak.book-service.svc.cluster.local:8080/realms/books/protocol/openid-connect/certs"
+      audiences:
+        - "book-service.api"
+      forwardOriginalToken: true
+      outputClaimToHeaders:
+        - header: "X-Auth-User"
+          claim: "sub"
