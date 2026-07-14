@@ -1,0 +1,17 @@
+target/
+project/target/
+project/project/
+.bloop/
+.bsp/
+.metals/
+.scala-build/
+
+*.class
+*.log
+
+.idea/
+.vscode/
+*.iml
+
+.DS_Store
+Thumbs.db

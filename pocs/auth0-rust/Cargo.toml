@@ -1,0 +1,18 @@
+[package]
+name = "auth0-rust"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+license = "MIT"
+
+[lib]
+name = "auth0_rust"
+path = "src/lib.rs"
+
+[dependencies]
+base64 = "0.22.1"
+jsonwebtoken = "9.3.1"
+reqwest = { version = "0.12.28", default-features = false, features = ["blocking", "json", "multipart", "rustls-tls"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+url = "2.5.8"
