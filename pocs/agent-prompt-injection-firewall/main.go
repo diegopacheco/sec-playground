@@ -38,12 +38,7 @@ func main() {
 		AuditPath:     env("AUDIT_PATH", "audit.jsonl"),
 	})
 	server := &Server{firewall: firewall, instructionDir: "fixtures/instructions"}
-	mux := http.NewServeMux()
-	mux.HandleFunc("GET /health", server.health)
-	mux.HandleFunc("POST /run", server.run)
-	mux.HandleFunc("GET /audit", server.audit)
-	mux.HandleFunc("GET /receiver", server.receiver)
-	mux.HandleFunc("POST /receiver", server.receiver)
+	mux := newMux(server)
 	httpServer := &http.Server{
 		Addr:              ":" + port,
 		Handler:           mux,
@@ -54,6 +49,30 @@ func main() {
 	}
 	log.Printf("agent firewall listening on %s", localURL)
 	log.Fatal(httpServer.ListenAndServe())
+}
+
+func newMux(server *Server) *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /{$}", server.index)
+	mux.HandleFunc("GET /health", server.health)
+	mux.HandleFunc("POST /run", server.run)
+	mux.HandleFunc("GET /audit", server.audit)
+	mux.HandleFunc("GET /receiver", server.receiver)
+	mux.HandleFunc("POST /receiver", server.receiver)
+	return mux
+}
+
+func (s *Server) index(w http.ResponseWriter, _ *http.Request) {
+	writeJSON(w, http.StatusOK, map[string][]string{
+		"endpoints": {
+			"GET /",
+			"GET /health",
+			"POST /run",
+			"GET /audit",
+			"GET /receiver",
+			"POST /receiver",
+		},
+	})
 }
 
 func (s *Server) health(w http.ResponseWriter, _ *http.Request) {

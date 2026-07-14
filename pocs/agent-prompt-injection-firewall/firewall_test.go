@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"path/filepath"
 	"testing"
 )
@@ -54,5 +57,36 @@ func TestHTTPWriteRequiresApproval(t *testing.T) {
 	allowed := firewall.authorize(candidate, "approved")
 	if !allowed.Allowed || allowed.Reason != "approved HTTP write allowed" {
 		t.Fatalf("unexpected approval: %+v", allowed)
+	}
+}
+
+func TestIndexListsEndpoints(t *testing.T) {
+	request := httptest.NewRequest(http.MethodGet, "/", nil)
+	response := httptest.NewRecorder()
+	newMux(&Server{}).ServeHTTP(response, request)
+	if response.Code != http.StatusOK {
+		t.Fatalf("unexpected status: %d", response.Code)
+	}
+	var body map[string][]string
+	if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"GET /", "GET /health", "POST /run", "GET /audit", "GET /receiver", "POST /receiver"}
+	if len(body["endpoints"]) != len(want) {
+		t.Fatalf("unexpected endpoints: %v", body["endpoints"])
+	}
+	for i := range want {
+		if body["endpoints"][i] != want[i] {
+			t.Fatalf("unexpected endpoints: %v", body["endpoints"])
+		}
+	}
+}
+
+func TestUnknownEndpointReturnsNotFound(t *testing.T) {
+	request := httptest.NewRequest(http.MethodGet, "/missing", nil)
+	response := httptest.NewRecorder()
+	newMux(&Server{}).ServeHTTP(response, request)
+	if response.Code != http.StatusNotFound {
+		t.Fatalf("unexpected status: %d", response.Code)
 	}
 }

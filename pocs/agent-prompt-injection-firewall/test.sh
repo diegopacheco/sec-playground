@@ -10,6 +10,11 @@ trap './stop.sh >/dev/null 2>&1 || true' EXIT
 go test -v ./...
 ./start.sh
 
+ENDPOINTS=$(curl -sf "http://localhost:${PORT}/")
+echo "$ENDPOINTS"
+echo "$ENDPOINTS" | grep -q 'GET /health'
+echo "$ENDPOINTS" | grep -q 'POST /run'
+
 SAFE=$(curl -sf -X POST "http://localhost:${PORT}/run" -H "Content-Type: application/json" -d '{"document":"safe.txt"}')
 echo "$SAFE"
 echo "$SAFE" | grep -q '"allowed":true'
