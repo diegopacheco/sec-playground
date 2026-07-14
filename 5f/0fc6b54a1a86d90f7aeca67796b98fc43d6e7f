@@ -1,0 +1,19 @@
+pocs/agent-prompt-injection-firewall/go.mod
+  s_158c6d23bf926d::t_7a776afc5e048c 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5f0fc6b54a1a86d90f7aeca67796b98fc43d6e7f",
+  "prompts": {},
+  "sessions": {
+    "s_158c6d23bf926d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6290-2c93-7622-af7a-7defcb38fb7e",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
