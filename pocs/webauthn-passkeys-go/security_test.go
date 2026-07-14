@@ -29,6 +29,29 @@ func TestReplaySessionRejected(t *testing.T) {
 	}
 }
 
+func TestSessionWithoutExpirationCanBeConsumed(t *testing.T) {
+	store, err := OpenStore(filepath.Join(t.TempDir(), "test.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer store.Close()
+	started := time.Now()
+	id, err := store.SaveSession("registration", []byte("user"), &webauthn.SessionData{Challenge: "challenge"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, _, err := store.ConsumeSession(id, "registration")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !session.Expires.After(started) {
+		t.Fatal("ceremony session did not receive an expiration")
+	}
+	if session.Expires.After(started.Add(5*time.Minute + time.Second)) {
+		t.Fatal("ceremony session expiration is too long")
+	}
+}
+
 func TestIncorrectOriginRejected(t *testing.T) {
 	clientData := protocol.CollectedClientData{
 		Type:      protocol.AssertCeremony,

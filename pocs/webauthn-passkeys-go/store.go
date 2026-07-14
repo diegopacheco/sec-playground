@@ -154,11 +154,15 @@ func (s *Store) SaveSession(kind string, userID []byte, session *webauthn.Sessio
 	if err != nil {
 		return "", err
 	}
-	data, err := json.Marshal(session)
+	storedSession := *session
+	if storedSession.Expires.IsZero() {
+		storedSession.Expires = time.Now().Add(5 * time.Minute)
+	}
+	data, err := json.Marshal(&storedSession)
 	if err != nil {
 		return "", err
 	}
-	_, err = s.db.Exec("INSERT INTO sessions(id, kind, user_id, data, expires) VALUES(?, ?, ?, ?, ?)", id, kind, userID, data, session.Expires.Unix())
+	_, err = s.db.Exec("INSERT INTO sessions(id, kind, user_id, data, expires) VALUES(?, ?, ?, ?, ?)", id, kind, userID, data, storedSession.Expires.Unix())
 	return id, err
 }
 
