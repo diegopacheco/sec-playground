@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Identity Record</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="shell profile-shell">
+    <header class="masthead">
+        <span class="status-dot"></span>
+        <span>Authenticated record</span>
+        <a class="station text-link" th:href="@{/}">Return home</a>
+    </header>
+    <section class="profile-header">
+        <img class="avatar large" th:if="${user.picture}" th:src="${user.picture}" alt="Profile portrait">
+        <div>
+            <p class="eyebrow">Access granted</p>
+            <h1>Hurray, you are authenticated!</h1>
+            <p class="lede" th:text="${user.email}">Verified email</p>
+        </div>
+        <form class="profile-logout" th:action="@{/logout}" method="post">
+            <button class="button secondary" type="submit">Sign out</button>
+        </form>
+    </section>
+    <section class="claims-panel">
+        <div class="section-heading">
+            <span>OIDC claims</span>
+            <span th:text="${#maps.size(claims)} + ' fields'">0 fields</span>
+        </div>
+        <dl class="claims">
+            <div th:each="claim : ${claims}">
+                <dt th:text="${claim.key}">claim</dt>
+                <dd th:text="${claim.value}">value</dd>
+            </div>
+        </dl>
+    </section>
+</main>
+</body>
+</html>

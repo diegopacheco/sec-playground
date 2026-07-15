@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Auth0 Access Desk</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="shell">
+    <header class="masthead">
+        <span class="status-dot"></span>
+        <span>Identity gateway</span>
+        <span class="station">Local station · 3000</span>
+    </header>
+    <section class="hero">
+        <p class="eyebrow">Access pending</p>
+        <h1>Oops, you are not authenticated.</h1>
+        <p class="lede">Your identity has not been verified yet. Continue to Auth0 to securely open a local session.</p>
+        <div class="actions">
+            <a class="button primary" th:href="@{/oauth2/authorization/okta}">Continue with Auth0</a>
+        </div>
+    </section>
+    <aside class="credential locked">
+        <span class="credential-label">No active session</span>
+        <div class="lock-mark" aria-hidden="true">×</div>
+        <strong>Identity unknown</strong>
+        <span>Authentication required</span>
+        <span class="verified">Access denied</span>
+    </aside>
+    <footer>
+        <span>Authorization Code Flow</span>
+        <span>Waiting for Auth0 verification</span>
+    </footer>
+</main>
+</body>
+</html>
