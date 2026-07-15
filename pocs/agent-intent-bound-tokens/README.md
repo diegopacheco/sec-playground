@@ -29,7 +29,7 @@ internal/verification      constraint evaluation and audit state
 ./start.sh
 ```
 
-The service listens on `http://localhost:8081`.
+The backend listens on `http://localhost:8081` and the frontend listens on `http://localhost:5174`.
 
 The root URL returns the available HTTP endpoints as JSON.
 
@@ -39,15 +39,13 @@ The root URL returns the available HTTP endpoints as JSON.
 
 ## Interactive UI
 
-Start the API, then run the React interface with Bun:
+The React interface starts with the backend through the root script:
 
 ```bash
-cd ui
-bun install
-bun run dev
+./start.sh
 ```
 
-Open `http://localhost:5173`. The interface issues intent-bound tokens, checks scope escalation and amount overflow, confirms one valid action, rejects replay, and renders the audit ledger.
+Open `http://localhost:5174`. The interface issues intent-bound tokens, checks scope escalation and amount overflow, confirms one valid action, rejects replay, and renders the audit ledger.
 
 Build the interface with TypeScript 7:
 
@@ -85,5 +83,6 @@ curl -s -X POST http://localhost:8081/api/verify \
 | Variable | Default | Purpose |
 |---|---|---|
 | `PORT` | `8081` | HTTP port |
+| `UI_PORT` | `5174` | Frontend port |
 | `INTENT_TOKEN_SECRET` | Local development value in `start.sh` | HMAC signing secret |
 | `INTENT_TOKEN_ISSUER` | `intent.local` | Signed issuer claim |
