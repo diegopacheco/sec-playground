@@ -1,0 +1,86 @@
+pocs/token-blast-radius/frontend/src/styles.css
+  s_e96428f8cb0f75::t_43b35acd4ac72a 30,41,62,67-73,1073-1077,1079
+  s_e96428f8cb0f75::t_89c9d968029b0a 1-29,31-40,42-61,63-66,74-367,369-374,377-416,418-1072,1084-1140
+  s_e96428f8cb0f75::t_3d15f40dede068 368,375-376,417,1078,1080-1083
+pocs/token-blast-radius/internal/graph/engine_test.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-49
+pocs/token-blast-radius/frontend/src/components/ReachabilityGraph.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-146
+pocs/token-blast-radius/go.mod
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-3
+pocs/token-blast-radius/internal/graph/engine.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-115,117-199
+  s_e96428f8cb0f75::t_4fde0ef1e7eb89 116
+pocs/token-blast-radius/README.md
+  s_e96428f8cb0f75::t_7ba6802ef80d8a 1-99
+pocs/token-blast-radius/internal/token/service.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-80
+pocs/token-blast-radius/frontend/src/components/TokenInspector.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-51
+pocs/token-blast-radius/frontend/src/types.ts
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-64
+pocs/token-blast-radius/internal/domain/model.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-3,12-90
+  s_e96428f8cb0f75::t_4fde0ef1e7eb89 4-11
+pocs/token-blast-radius/frontend/src/components/RiskDial.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-23
+pocs/token-blast-radius/frontend/vite.config.ts
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-12
+pocs/token-blast-radius/frontend/package.json
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-22
+pocs/token-blast-radius/start.sh
+  s_e96428f8cb0f75::t_7ba6802ef80d8a 1-31
+pocs/token-blast-radius/test.sh
+  s_e96428f8cb0f75::t_7ba6802ef80d8a 1-9,13-43
+  s_e96428f8cb0f75::t_8aa4a95e0ed9c0 10-12
+pocs/token-blast-radius/frontend/tsconfig.json
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-7
+pocs/token-blast-radius/frontend/src/main.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-10
+pocs/token-blast-radius/.gitignore
+  s_e96428f8cb0f75::t_b0c36e83794133 4
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-3
+pocs/token-blast-radius/frontend/src/App.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-151
+pocs/token-blast-radius/cmd/server/main.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-40
+pocs/token-blast-radius/frontend/src/components/NodeDetail.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-42
+pocs/token-blast-radius/frontend/src/components/MetricStrip.tsx
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-25
+pocs/token-blast-radius/stop.sh
+  s_e96428f8cb0f75::t_7ba6802ef80d8a 1-10
+pocs/token-blast-radius/frontend/tsconfig.app.json
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-20
+pocs/token-blast-radius/frontend/src/api.ts
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-22
+pocs/token-blast-radius/internal/httpapi/server.go
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-77
+pocs/token-blast-radius/internal/scenario/catalog.go
+  s_e96428f8cb0f75::t_4fde0ef1e7eb89 31,55,86
+  s_e96428f8cb0f75::t_83869c7991dbeb 1-30,32-54,56-85,87-115
+pocs/token-blast-radius/frontend/index.html
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-14
+pocs/token-blast-radius/frontend/src/assets.d.ts
+  s_e96428f8cb0f75::t_e5919795ed8de0 1-4
+pocs/token-blast-radius/frontend/tsconfig.node.json
+  s_e96428f8cb0f75::t_ec5046d71c31b2 1-11
+pocs/token-blast-radius/frontend/bun.lock
+  s_e96428f8cb0f75::t_2109e997028f4c 1-169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7a3d8b8d210785f2b677a7ba5c296a787f79ce1c",
+  "prompts": {},
+  "sessions": {
+    "s_e96428f8cb0f75": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f643f-e344-72a2-8999-824440e17c19",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
