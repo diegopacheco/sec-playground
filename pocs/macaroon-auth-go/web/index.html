@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build and inspect attenuated macaroon capabilities">
+  <title>Macaroon Capability Workshop</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="paper-grid"></div>
+  <header class="masthead">
+    <a class="brand" href="/">
+      <span class="brand-mark">M</span>
+      <span>Capability Workshop</span>
+    </a>
+    <div class="status"><span></span> Go verifier online</div>
+  </header>
+
+  <main>
+    <section class="hero reveal">
+      <div class="eyebrow">Authority should get smaller as it travels</div>
+      <h1>Pass the token.<br><em>Keep the limits.</em></h1>
+      <p class="hero-copy">Macaroons turn authorization into a chain of signed restrictions. Anyone holding one can narrow it. Nobody holding one can widen it.</p>
+      <div class="formula">
+        <span>root signature</span>
+        <b>→</b>
+        <span>HMAC(caveat 1)</span>
+        <b>→</b>
+        <span>HMAC(caveat n)</span>
+      </div>
+    </section>
+
+    <section class="workbench reveal delayed">
+      <aside class="lesson">
+        <span class="section-number">01</span>
+        <h2>Mint authority</h2>
+        <p>Start with a useful envelope. A trailing asterisk permits every value sharing that prefix.</p>
+        <form id="mint-form">
+          <label>Resource<input id="mint-resource" value="/records/*" required></label>
+          <div class="field-pair">
+            <label>Operation<input id="mint-operation" value="*" required></label>
+            <label>Location<input id="mint-location" value="*" required></label>
+          </div>
+          <label>Lifetime
+            <select id="mint-expiration">
+              <option value="300">5 minutes</option>
+              <option value="900" selected>15 minutes</option>
+              <option value="3600">60 minutes</option>
+            </select>
+          </label>
+          <button class="primary" type="submit">Mint root macaroon</button>
+        </form>
+      </aside>
+
+      <div class="chain-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-number">02</span>
+            <h2>Attenuate the chain</h2>
+          </div>
+          <span id="chain-count" class="counter">No token</span>
+        </div>
+        <p>Each restriction narrows what the token allows. A resource restriction permits that resource and rejects resources outside it.</p>
+        <div id="empty-chain" class="empty-chain">
+          <div class="seal">M</div>
+          <p>Mint a macaroon to reveal its signature chain.</p>
+        </div>
+        <div id="chain" class="chain" hidden></div>
+        <form id="attenuate-form" class="attenuate-form" hidden>
+          <select id="caveat-type" aria-label="Restriction type">
+            <option value="resource">Resource</option>
+            <option value="operation">Operation</option>
+            <option value="location">Location</option>
+            <option value="expires">Expiration</option>
+          </select>
+          <input id="caveat-value" value="/records/payroll" aria-label="Restriction value" required>
+          <button type="submit">Add restriction</button>
+        </form>
+        <div id="token-box" class="token-box" hidden>
+          <div><span>Portable token</span><button id="copy-token" type="button">Copy</button></div>
+          <code id="token-value"></code>
+        </div>
+      </div>
+    </section>
+
+    <section class="verifier reveal later">
+      <div class="verifier-copy">
+        <span class="section-number">03</span>
+        <h2>Challenge the capability</h2>
+        <p>The signature proves integrity. The full caveat set decides authority. Try a valid request, then change one field.</p>
+      </div>
+      <form id="verify-form" class="verify-form">
+        <label>Requested resource<input id="verify-resource" value="/records/payroll" required></label>
+        <label>Requested operation<input id="verify-operation" value="read" required></label>
+        <label>Request location<input id="verify-location" value="us-west" required></label>
+        <button class="ink" type="submit">Verify access</button>
+      </form>
+      <div id="verdict" class="verdict waiting">
+        <div class="verdict-word">WAITING</div>
+        <p>Mint a token, add restrictions, and verify a request.</p>
+        <div id="checks" class="checks"></div>
+      </div>
+    </section>
+
+    <section class="principles reveal later">
+      <article><span>01</span><h3>Delegable</h3><p>A holder can pass a narrowed token to another service without revealing the root key.</p></article>
+      <article><span>02</span><h3>Monotonic</h3><p>Every new caveat joins with logical AND. Authority only moves in one direction.</p></article>
+      <article><span>03</span><h3>Contextual</h3><p>Decisions can bind access to a path, operation, place, and moment.</p></article>
+    </section>
+  </main>
+
+  <footer><span>MACAROON AUTHORIZATION</span><span>HMAC-SHA256 · FIRST-PARTY CAVEATS</span></footer>
+  <script src="/app.js"></script>
+</body>
+</html>
