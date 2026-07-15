@@ -36,7 +36,6 @@ This wrapper is usable for server-side Kotlin applications that want Kotlin conf
 
 * Coroutine adapters for synchronous Management API operations
 * HTTP-level tests for cancellation, error mapping, retries, and automatic token renewal
-* Compatibility with running Gradle directly on Java 25; use Java 17 for the current Gradle wrapper
 * Session creation, callback processing, state and nonce verification, cookie handling, and JWT validation
 * Kotlin-native models and Management API method signatures independent of the Java SDK
 

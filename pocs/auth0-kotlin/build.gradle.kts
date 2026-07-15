@@ -14,6 +14,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.3")
 }
 
+val integrationTest by sourceSets.creating
+
+integrationTest.compileClasspath += sourceSets.main.get().output
+integrationTest.runtimeClasspath += sourceSets.main.get().output
+
+configurations[integrationTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
+configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
+
 kotlin {
     explicitApi()
     jvmToolchain(17)
@@ -30,6 +38,12 @@ java {
 }
 
 tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.register<Test>("integrationTest") {
+    testClassesDirs = integrationTest.output.classesDirs
+    classpath = integrationTest.runtimeClasspath
     useJUnitPlatform()
 }
 
