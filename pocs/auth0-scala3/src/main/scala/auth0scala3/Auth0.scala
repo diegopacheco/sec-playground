@@ -6,76 +6,187 @@ import com.auth0.client.auth.ClientAssertionSigner
 import com.auth0.client.auth.LogoutUrlBuilder
 import com.auth0.client.mgmt.ManagementApi
 import com.auth0.client.mgmt.ManagementApiBuilder
+import com.auth0.client.mgmt.core.Environment
+import com.auth0.client.mgmt.core.LogConfig
 import com.auth0.net.Request
 import com.auth0.net.Response
+import com.auth0.net.client.Auth0HttpClient
+import okhttp3.OkHttpClient
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.jdk.FutureConverters.*
 
 object Auth0:
   def auth(domain: String, clientId: String): AuthClient =
-    auth(domain, clientId, identity[AuthAPI.Builder])
+    auth(domain, clientId, _ => ())
 
   def auth(
       domain: String,
       clientId: String,
-      configure: AuthAPI.Builder => AuthAPI.Builder
+      configure: AuthenticationConfig => Unit
   ): AuthClient =
-    AuthClient(configure(AuthAPI.newBuilder(domain, clientId)).build())
+    configured(AuthAPI.newBuilder(domain, clientId), configure)
 
   def auth(domain: String, clientId: String, clientSecret: String): AuthClient =
-    auth(domain, clientId, clientSecret, identity[AuthAPI.Builder])
+    auth(domain, clientId, clientSecret, _ => ())
 
   def auth(
       domain: String,
       clientId: String,
       clientSecret: String,
-      configure: AuthAPI.Builder => AuthAPI.Builder
+      configure: AuthenticationConfig => Unit
   ): AuthClient =
-    AuthClient(configure(AuthAPI.newBuilder(domain, clientId, clientSecret)).build())
+    configured(AuthAPI.newBuilder(domain, clientId, clientSecret), configure)
 
   def auth(domain: String, clientId: String, signer: ClientAssertionSigner): AuthClient =
-    auth(domain, clientId, signer, identity[AuthAPI.Builder])
+    auth(domain, clientId, signer, _ => ())
 
   def auth(
       domain: String,
       clientId: String,
       signer: ClientAssertionSigner,
-      configure: AuthAPI.Builder => AuthAPI.Builder
+      configure: AuthenticationConfig => Unit
   ): AuthClient =
-    AuthClient(configure(AuthAPI.newBuilder(domain, clientId, signer)).build())
+    configured(AuthAPI.newBuilder(domain, clientId, signer), configure)
 
   def managementWithToken(
       domain: String,
       token: String,
-      configure: ManagementApiBuilder => ManagementApiBuilder = identity[ManagementApiBuilder]
+      configure: ManagementConfig => Unit = _ => ()
   ): ManagementClient =
-    ManagementClient(configure(ManagementApi.builder().domain(domain).token(token)).build())
+    configured(ManagementApi.builder().domain(domain).token(token), configure)
 
   def managementWithClientCredentials(
       domain: String,
       clientId: String,
       clientSecret: String,
-      configure: ManagementApiBuilder => ManagementApiBuilder = identity[ManagementApiBuilder]
+      configure: ManagementConfig => Unit = _ => ()
   ): ManagementClient =
-    ManagementClient(configure(ManagementApi.builder().domain(domain).clientCredentials(clientId, clientSecret)).build())
+    configured(ManagementApi.builder().domain(domain).clientCredentials(clientId, clientSecret), configure)
 
-  def management(configure: ManagementApiBuilder => ManagementApiBuilder): ManagementClient =
-    ManagementClient(configure(ManagementApi.builder()).build())
+  def management(configure: ManagementConfig => Unit): ManagementClient =
+    configured(ManagementApi.builder(), configure)
+
+  private def configured(
+      builder: AuthAPI.Builder,
+      configure: AuthenticationConfig => Unit
+  ): AuthClient =
+    configure(AuthenticationConfig(builder))
+    AuthClient(builder.build())
+
+  private def configured(
+      builder: ManagementApiBuilder,
+      configure: ManagementConfig => Unit
+  ): ManagementClient =
+    configure(ManagementConfig(builder))
+    ManagementClient(builder.build())
+
+final class AuthenticationConfig private (builder: AuthAPI.Builder):
+  def httpClient(client: Auth0HttpClient): Unit =
+    builder.withHttpClient(client)
+
+object AuthenticationConfig:
+  private[auth0scala3] def apply(builder: AuthAPI.Builder): AuthenticationConfig =
+    new AuthenticationConfig(builder)
+
+final class ManagementConfig private (builder: ManagementApiBuilder):
+  def domain(value: String): Unit =
+    builder.domain(value)
+
+  def url(value: String): Unit =
+    builder.url(value)
+
+  def environment(value: Environment): Unit =
+    builder.environment(value)
+
+  def token(value: String): Unit =
+    builder.token(value)
+
+  def clientCredentials(clientId: String, clientSecret: String): Unit =
+    builder.clientCredentials(clientId, clientSecret)
+
+  def audience(value: String): Unit =
+    builder.audience(value)
+
+  def timeout(seconds: Int): Unit =
+    builder.timeout(seconds)
+
+  def maxRetries(value: Int): Unit =
+    builder.maxRetries(value)
+
+  def customDomain(value: String): Unit =
+    builder.customDomain(value)
+
+  def httpClient(client: OkHttpClient): Unit =
+    builder.httpClient(client)
+
+  def logging(config: LogConfig): Unit =
+    builder.logging(config)
+
+  def header(name: String, value: String): Unit =
+    builder.addHeader(name, value)
+
+object ManagementConfig:
+  private[auth0scala3] def apply(builder: ManagementApiBuilder): ManagementConfig =
+    new ManagementConfig(builder)
+
+final class AuthorizationConfig private (builder: AuthorizeUrlBuilder):
+  def connection(value: String): Unit =
+    builder.withConnection(value)
+
+  def audience(value: String): Unit =
+    builder.withAudience(value)
+
+  def state(value: String): Unit =
+    builder.withState(value)
+
+  def scope(value: String): Unit =
+    builder.withScope(value)
+
+  def responseType(value: String): Unit =
+    builder.withResponseType(value)
+
+  def organization(value: String): Unit =
+    builder.withOrganization(value)
+
+  def invitation(value: String): Unit =
+    builder.withInvitation(value)
+
+  def parameter(name: String, value: String): Unit =
+    builder.withParameter(name, value)
+
+  def codeChallenge(value: String): Unit =
+    builder.withCodeChallenge(value)
+
+object AuthorizationConfig:
+  private[auth0scala3] def apply(builder: AuthorizeUrlBuilder): AuthorizationConfig =
+    new AuthorizationConfig(builder)
+
+final class LogoutConfig private (builder: LogoutUrlBuilder):
+  def federated(value: Boolean = true): Unit =
+    builder.useFederated(value)
+
+object LogoutConfig:
+  private[auth0scala3] def apply(builder: LogoutUrlBuilder): LogoutConfig =
+    new LogoutConfig(builder)
 
 final class AuthClient(val java: AuthAPI):
   def authorizationUrl(
       redirectUri: String,
-      configure: AuthorizeUrlBuilder => AuthorizeUrlBuilder = identity[AuthorizeUrlBuilder]
+      configure: AuthorizationConfig => Unit = _ => ()
   ): String =
-    configure(java.authorizeUrl(redirectUri)).build()
+    val builder = java.authorizeUrl(redirectUri)
+    configure(AuthorizationConfig(builder))
+    builder.build()
 
   def logoutUrl(
       returnToUrl: String,
       includeClientId: Boolean = true,
-      configure: LogoutUrlBuilder => LogoutUrlBuilder = identity[LogoutUrlBuilder]
+      configure: LogoutConfig => Unit = _ => ()
   ): String =
-    configure(java.logoutUrl(returnToUrl, includeClientId)).build()
+    val builder = java.logoutUrl(returnToUrl, includeClientId)
+    configure(LogoutConfig(builder))
+    builder.build()
 
   def use[A](operation: AuthAPI => A): A =
     operation(java)

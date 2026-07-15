@@ -101,17 +101,22 @@ Sensitive headers and bodies are redacted by default. Body logging requires an e
 
 ## Remaining Limitations
 
+- This is not an official Auth0 SDK and owns its protocol, compatibility, and release risk.
 - Management API models are wrappers around `serde_json::Value`, not field-typed Rust structs.
 - Management API parameters use `path_param`, `query`, `body`, and `multipart` builders instead of route-specific typed signatures.
 - Generated operation names are flattened snake case names instead of nested resource clients.
 - The endpoint catalog comes from Java raw client source parsing rather than the Auth0 Fern source.
+- The catalog contains 433 routes, but tests do not execute every route or validate every response schema.
+- Generated route methods do not document required path parameters, query parameters, or request bodies.
 - Endpoint-specific error response bodies are not field-typed.
 - Authentication response structs cover common fields but leave many nested fields as flexible JSON.
 - Client assertion signing supports PEM RSA keys with RS256 and RS384 only.
 - Custom HTTP clients are Reqwest clients rather than transport traits.
 - `Retry-After` HTTP dates are not parsed; numeric seconds are supported.
-- Pagination is offset-based and not generated with route-specific item types.
+- Token refresh is not single-flight, so concurrent cache misses can request multiple replacement tokens.
+- Pagination is blocking, offset-based, not generated with route-specific item types, and infers item arrays from response JSON.
 - Multipart parts are in memory and do not include file-path helpers.
+- The crate requires Rust 1.94 and edition 2024.
 - The crate does not create application sessions, process callbacks, verify state or nonce values, manage cookies, or validate JWT signatures and claims.
 - Tests use loopback HTTP servers and local request fixtures rather than a live Auth0 tenant.
 

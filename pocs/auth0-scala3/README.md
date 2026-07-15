@@ -6,7 +6,7 @@ This artifact does not implement Auth0 protocols. Authentication requests, Manag
 
 This wrapper adds:
 
-* Scala configuration functions
+* Scala configuration types for authentication, authorization URLs, logout, and Management API clients
 * Typed access to every top-level Management API client
 * `Future` adapters for Java SDK requests
 * Direct access to every Java SDK API through `java` and `use`
@@ -35,7 +35,9 @@ val auth = Auth0.auth("tenant.auth0.com", "client-id", "client-secret")
 
 val url = auth.authorizationUrl(
   "https://app.test/callback",
-  _.withAudience("https://api.test").withScope("openid profile email")
+  config =>
+    config.audience("https://api.test")
+    config.scope("openid profile email")
 )
 
 val userInfo = auth.java.userInfo("access-token").bodyFuture
@@ -47,6 +49,16 @@ val userInfo = auth.java.userInfo("access-token").bodyFuture
 val management = Auth0.managementWithToken("tenant.auth0.com", "access-token")
 val user = management.users.get("auth0|123")
 val roles = management.users.roles()
+```
+
+Management configuration also uses Scala types:
+
+```scala
+val management = Auth0.managementWithToken("tenant.auth0.com", "access-token", config =>
+  config.timeout(10)
+  config.maxRetries(2)
+  config.header("x-request-source", "scala-service")
+)
 ```
 
 Automatic client credentials use the Java SDK implementation:

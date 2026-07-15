@@ -34,12 +34,15 @@ object Auth0Spec:
     val auth = Auth0.auth("tenant.auth0.com", "client-id", "secret")
     val authorizationUrl = auth.authorizationUrl(
       "https://app.test/callback",
-      _.withAudience("https://api.test").withScope("openid profile").withState("state")
+      config =>
+        config.audience("https://api.test")
+        config.scope("openid profile")
+        config.state("state")
     )
     val logoutUrl = auth.logoutUrl(
       "https://app.test/out",
       true,
-      _.useFederated(true)
+      _.federated()
     )
 
     assertTrue(authorizationUrl.startsWith("https://tenant.auth0.com/authorize?"))
@@ -53,7 +56,11 @@ object Auth0Spec:
     val management = Auth0.managementWithToken(
       "tenant.auth0.com",
       "token",
-      _.timeout(3).maxRetries(1).customDomain("login.test").addHeader("x-test", "value")
+      config =>
+        config.timeout(3)
+        config.maxRetries(1)
+        config.customDomain("login.test")
+        config.header("x-test", "value")
     )
 
     assertEquals(management.users.getClass.getName, "com.auth0.client.mgmt.UsersClient")
