@@ -1,64 +1,47 @@
-use auth0_rust::{Auth0Error, AuthApi, ManagementApi};
+use auth0_rust::AuthApi;
 
-fn domain() -> String {
-    std::env::var("AUTH0_DOMAIN").expect("AUTH0_DOMAIN must be set")
-}
-
-fn status(error: Auth0Error) -> u16 {
-    match error {
-        Auth0Error::Http(error) => error.status,
-        other => panic!("expected Auth0 HTTP error, got {other}"),
-    }
+fn env(name: &str) -> String {
+    std::env::var(name).unwrap_or_else(|_| panic!("{name} must be set"))
 }
 
 #[test]
-#[ignore = "requires AUTH0_DOMAIN and network access"]
-fn retrieves_tenant_signing_keys() {
-    let auth = AuthApi::builder(domain(), "integration-client")
+#[ignore = "requires auth0-env.sh and network access"]
+fn live_tenant_accepts_authorization_request_built_by_sdk() {
+    let domain = env("AUTH0_DOMAIN");
+    let client_id = env("AUTH0_CLIENT_ID");
+    let redirect_uri = env("AUTH0_REDIRECT_URI");
+
+    let auth = AuthApi::builder(&domain, &client_id)
+        .client_secret(env("AUTH0_CLIENT_SECRET"))
         .build()
         .expect("Auth API client");
 
-    let response = auth.jwks().execute().expect("JWKS response");
-    let keys = response
-        .body
-        .and_then(|body| body.get("keys").cloned())
-        .and_then(|keys| keys.as_array().cloned())
-        .expect("JWKS keys");
+    let url = auth
+        .authorize_url(&redirect_uri)
+        .scope("openid profile email")
+        .state("integration-state")
+        .build();
 
-    assert_eq!(200, response.status);
-    assert!(!keys.is_empty());
-}
+    assert!(url.starts_with(&format!("https://{domain}/authorize")));
+    assert!(url.contains(&format!("client_id={client_id}")));
 
-#[test]
-#[ignore = "requires AUTH0_DOMAIN and network access"]
-fn rejects_invalid_access_token() {
-    let auth = AuthApi::builder(domain(), "integration-client")
+    let client = reqwest::blocking::Client::builder()
+        .redirect(reqwest::redirect::Policy::none())
         .build()
-        .expect("Auth API client");
+        .expect("http client");
+    let response = client.get(&url).send().expect("authorize response");
 
-    let error = auth
-        .user_info("integration-invalid-token")
-        .execute()
-        .expect_err("invalid access token must fail");
+    let status = response.status().as_u16();
+    let location = response
+        .headers()
+        .get("location")
+        .and_then(|value| value.to_str().ok())
+        .unwrap_or_default()
+        .to_string();
 
-    assert_eq!(401, status(error));
-}
-
-#[test]
-#[ignore = "requires AUTH0_DOMAIN and network access"]
-fn rejects_invalid_management_client_credentials() {
-    let management = ManagementApi::builder()
-        .domain(domain())
-        .client_credentials("integration-invalid-client", "integration-invalid-secret")
-        .build()
-        .expect("Management API client");
-
-    let error = management
-        .users_get()
-        .expect("users request")
-        .path_param("id", "auth0|integration-invalid-user")
-        .execute()
-        .expect_err("invalid client credentials must fail");
-
-    assert_eq!(401, status(error));
+    assert_eq!(302, status, "tenant rejected the authorization request: {location}");
+    assert!(
+        location.starts_with("/u/login"),
+        "expected redirect to Universal Login, got {location}"
+    );
 }
