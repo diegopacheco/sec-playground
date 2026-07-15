@@ -239,6 +239,7 @@ final class ManagementClient(val java: ManagementApi):
     tokenExchangeProfiles,
     userAttributeProfiles,
     userBlocks,
+    userGrants,
     users,
     verifiableCredentials
   }

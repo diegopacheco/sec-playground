@@ -42,6 +42,62 @@ This wrapper is usable for server-side Scala 3 applications that want small Scal
 
 The wrapper intentionally remains thin. Use `java` or `use` whenever the Scala surface does not expose an operation directly.
 
+## Scala 3 Compared To The Java SDK
+
+Side by side against `com.auth0:auth0:3.10.0`. The Java column is the official API. The Scala column is what this wrapper puts in front of it. Counts come from `javap` on the published jar and from running the suites.
+
+| Capability | Java SDK 3.10.0 | Scala 3 wrapper | Tested |
+| --- | --- | --- | --- |
+| Client construction | `AuthAPI.newBuilder(domain, clientId)`, with secret, with `ClientAssertionSigner` | `Auth0.auth(domain, clientId)`, with secret, with signer | Unit |
+| Authorization URL | `authorizeUrl(uri)` returns a mutable builder | `authorizationUrl(uri, config)` returns the built `String` | Unit and live tenant |
+| Logout URL | `logoutUrl(uri, includeClientId)` | `logoutUrl(uri, includeClientId, config)` | Unit |
+| Remaining 27 auth operations | 27 typed methods | No Scala signature, reach through `auth.java` or `auth.use` | `exchangeCode` on live tenant |
+| Management API clients | 45 accessor methods | 45 through the `export` facade | Unit |
+| Management construction | `ManagementApiBuilder` | `ManagementConfig` | Unit |
+| Async request | `executeAsync()` returns `CompletableFuture` | `future` and `bodyFuture` return `Future` | Unit |
+| Response body | `getBody()` may return `null` | `bodyOption` returns `Option` | Unit |
+| Response status | `getStatusCode()` | `statusCode` | Unit |
+| Models, transport, retries, token renewal, error mapping | Implemented | Delegated unchanged | Not tested here |
+| Sessions, cookies, state and nonce, JWT validation | Not provided | Not provided | Not applicable |
+
+Test totals: 6 unit tests and 1 live integration test against a real tenant.
+
+## Features Missing In The Scala 3 Wrapper
+
+The wrapper is deliberately thin. These gaps are real and worth knowing before adopting it.
+
+- **No Scala overloads for 27 of the 30 `AuthAPI` methods.** `login`, `exchangeCode`, `userInfo`, `renewAuth`, `revokeToken`, `signUp`, `resetPassword`, MFA, passwordless, PAR, and JAR have no Scala signature. Call them through `auth.java` or `auth.use` and handle Java nulls and exceptions yourself.
+- **No `Future` adapters for Management API calls.** Every management operation blocks the calling thread. `future` and `bodyFuture` only apply to `Request` values, which the Authentication API returns.
+- **No Scala-native models.** Requests and responses stay Java types such as `TokenHolder`, `UserInfo`, and `User`, so `null` and Java collections cross into Scala code.
+- **Errors are Java exceptions.** `APIException` and `OAuthTokenException` are thrown rather than returned as `Either` or `Try`.
+- **No session handling.** No callback processing, state or nonce verification, cookie management, or JWT signature and claim validation. The Java SDK does not provide these either, so `sample-app/server` implements them by hand.
+- **Thin coverage of the wrapped surface.** The 6 unit tests cover the Scala adapters only. Error mapping, retries, and automatic token renewal are delegated to the Java SDK and are not tested here. The live integration test exercises only the authorization URL and the code exchange, so `login`, MFA, passwordless, PAR, and JAR are unverified against a real tenant.
+
+## Authenticate a User
+
+The full authorization code flow with the wrapper. This is what `sample-app/server` runs.
+
+```scala
+import auth0scala3.Auth0
+
+val auth = Auth0.auth("tenant.auth0.com", "client-id", "client-secret")
+
+val loginUrl = auth.authorizationUrl(
+  "http://localhost:3000/callback",
+  config =>
+    config.scope("openid profile email")
+    config.state("random-state")
+)
+
+val tokens = auth.java.exchangeCode("code-from-callback", "http://localhost:3000/callback").execute().getBody
+val idToken = tokens.getIdToken
+val accessToken = tokens.getAccessToken
+
+val profile = auth.java.userInfo(accessToken).execute().getBody.getValues
+```
+
+Send the browser to `loginUrl`, and Auth0 returns an authorization code to the callback. The code exchange runs on the server, so the client secret never reaches the browser.
+
 ## Authentication
 
 ```scala
