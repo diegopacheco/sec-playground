@@ -1,0 +1,19 @@
+pocs/auth0-kotlin/.gitignore
+  s_1fdb5eb76951ac::t_8e1523adaf2499 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "cb9ceac2422a796d0bb64f0785f5abc7ed7665b6",
+  "prompts": {},
+  "sessions": {
+    "s_1fdb5eb76951ac": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6344-864e-7bb0-a5c2-b871fd386dff",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
