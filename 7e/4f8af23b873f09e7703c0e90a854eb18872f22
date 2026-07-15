@@ -1,0 +1,19 @@
+pocs/auth0-webapp/.gitignore
+  s_43112e833c1adf::t_b0a896dcc97eea 38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7e4f8af23b873f09e7703c0e90a854eb18872f22",
+  "prompts": {},
+  "sessions": {
+    "s_43112e833c1adf": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f67ab-982d-75c1-a8c4-ad51e9ce3565",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
