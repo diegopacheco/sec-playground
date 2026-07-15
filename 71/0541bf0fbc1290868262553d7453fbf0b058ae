@@ -1,0 +1,69 @@
+pocs/auth0-scala3/build.sbt
+  s_d64566c7ff09e4::t_b54917d7f523d5 5-6,8,17
+pocs/auth0-scala3/src/it/scala/auth0scala3/Auth0IntegrationSuite.scala
+  s_d64566c7ff09e4::t_05caa029d5baac 4,37,41
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-3,5-36,39-40,42
+  s_d64566c7ff09e4::t_ddbec10dd61e4d 38
+pocs/auth0-scala3/test-integration.sh
+  s_d64566c7ff09e4::t_ddbec10dd61e4d 5
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-4
+pocs/auth0-rust/tests/auth0_integration.rs
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-64
+pocs/auth0-webapp/build.gradle
+  h_8e2c3875396153 23,25-27
+pocs/auth0-kotlin/test-integration.sh
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-5
+pocs/auth0-rust/test-integration.sh
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-5
+pocs/auth0-kotlin/gradle/wrapper/gradle-wrapper.properties
+  s_d64566c7ff09e4::t_b54917d7f523d5 3
+pocs/auth0-env.sh
+  s_d64566c7ff09e4::t_b54917d7f523d5 1
+pocs/auth0-kotlin/src/integrationTest/kotlin/com/auth0/kotlin/Auth0IntegrationTest.kt
+  s_d64566c7ff09e4::t_b54917d7f523d5 1-3,5,7-43,46-47,49-50
+  s_d64566c7ff09e4::t_05caa029d5baac 4,6,44,48
+  s_d64566c7ff09e4::t_ddbec10dd61e4d 45
+pocs/auth0-kotlin/build.gradle.kts
+  s_d64566c7ff09e4::t_b54917d7f523d5 17-18,22-24,44-46
+  s_d64566c7ff09e4::t_ddbec10dd61e4d 19-21
+  s_d64566c7ff09e4::t_1a93516dcd1969 47-49
+pocs/auth0-webapp/.gitattributes
+  s_d64566c7ff09e4::t_f436eb3e03fc1f 1-3
+pocs/auth0-webapp/.gitignore
+  s_d64566c7ff09e4::t_d3b36cedda7fad 1-37
+pocs/auth0-webapp/gradle/wrapper/gradle-wrapper.properties
+  s_d64566c7ff09e4::t_b24ae579c4375d 1-9
+pocs/auth0-webapp/gradlew
+  s_d64566c7ff09e4::t_633d28dbc1ec1a 1-248
+pocs/auth0-webapp/gradlew.bat
+  s_d64566c7ff09e4::t_e2de61600a74cd 1-82
+pocs/auth0-webapp/settings.gradle
+  s_d64566c7ff09e4::t_e6e78eda792fb9 1
+pocs/auth0-webapp/src/main/java/com/auth0/example/Auth0WebappApplication.java
+  s_d64566c7ff09e4::t_770d75378fdb92 1-13
+pocs/auth0-webapp/src/main/resources/application.properties
+  s_d64566c7ff09e4::t_c5a8eea7d51c12 1
+pocs/auth0-webapp/src/test/java/com/auth0/example/Auth0WebappApplicationTests.java
+  s_d64566c7ff09e4::t_82bfc47e8fec14 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "710541bf0fbc1290868262553d7453fbf0b058ae",
+  "prompts": {},
+  "humans": {
+    "h_8e2c3875396153": {
+      "author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d64566c7ff09e4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6777-cc42-79b2-aa60-f3c7093f9f8b",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
