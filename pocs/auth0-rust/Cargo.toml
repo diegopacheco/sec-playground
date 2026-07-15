@@ -1,3 +1,6 @@
+[workspace]
+members = ["sample-app/server"]
+
 [package]
 name = "auth0-rust"
 version = "0.1.0"

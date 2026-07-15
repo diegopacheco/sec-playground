@@ -22,6 +22,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "auth0-rust-sample-app"
+version = "0.1.0"
+dependencies = [
+ "auth0-rust",
+ "base64",
+ "serde_json",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

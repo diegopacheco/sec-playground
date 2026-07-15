@@ -15,3 +15,13 @@ lazy val root = (project in file("."))
     )
   )
   .settings(inConfig(IntegrationTest)(Defaults.testSettings))
+
+lazy val sampleApp = (project in file("sample-app/server"))
+  .dependsOn(root)
+  .settings(
+    name := "auth0-scala-3x-sample-app",
+    Compile / mainClass := Some("auth0scala3.webapp.Server"),
+    run / fork := true,
+    run / connectInput := true,
+    run / baseDirectory := (ThisBuild / baseDirectory).value / "sample-app"
+  )

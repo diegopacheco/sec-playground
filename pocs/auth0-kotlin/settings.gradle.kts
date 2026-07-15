@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "auth0-kotlin"
+
+include("sample-app:server")

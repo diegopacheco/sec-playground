@@ -1,0 +1,15 @@
+[package]
+name = "auth0-rust-sample-app"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+publish = false
+
+[[bin]]
+name = "sample-app"
+path = "src/main.rs"
+
+[dependencies]
+auth0-rust = { path = "../.." }
+base64 = "0.22.1"
+serde_json = "1.0.150"
