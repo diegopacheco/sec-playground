@@ -1,0 +1,34 @@
+pocs/auth0-scala3/src/test/scala/auth0scala3/Auth0Suite.scala
+  s_529e7072f963ee::t_a335f0da1880d3 10-11,26-32,34,45-50,52,59-60,62,66-85,91,95,98
+pocs/auth0-kotlin/README.md
+  s_529e7072f963ee::t_fa242231d442df 16-30
+pocs/auth0-scala3/README.md
+  s_529e7072f963ee::t_f9669d43eb3db1 38
+  s_529e7072f963ee::t_fa242231d442df 16-30,64-65
+pocs/auth0-scala3/src/main/scala/auth0scala3/Auth0.scala
+  s_529e7072f963ee::t_a335f0da1880d3 199-244
+pocs/auth0-kotlin/build.gradle.kts
+  s_529e7072f963ee::t_7d8f86bf26b345 18
+pocs/auth0-scala3/build.sbt
+  s_529e7072f963ee::t_a335f0da1880d3 8-12
+pocs/auth0-kotlin/src/main/kotlin/com/auth0/kotlin/Auth0.kt
+  s_529e7072f963ee::t_7d8f86bf26b345 7-24,27-47,50-55,64-68,71,75,79,83,87,91,94,98,102,106,110-112,117-119,123,127,131,135,139,143,147,151,155,159,163,168-169,171,175,178,182,186-233,237,240,243,246,259
+pocs/auth0-rust/README.md
+  s_529e7072f963ee::t_fa242231d442df 5-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "dcc16cab14d7e7ebec2ccbfac4f93aaed4e87f69",
+  "prompts": {},
+  "sessions": {
+    "s_529e7072f963ee": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f676d-ffdb-79c2-841a-c7550d31d50d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
