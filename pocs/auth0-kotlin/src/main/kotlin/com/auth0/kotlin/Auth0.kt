@@ -4,10 +4,55 @@ import com.auth0.client.auth.AuthAPI
 import com.auth0.client.auth.AuthorizeUrlBuilder
 import com.auth0.client.auth.ClientAssertionSigner
 import com.auth0.client.auth.LogoutUrlBuilder
+import com.auth0.client.mgmt.ActionsClient
+import com.auth0.client.mgmt.BrandingClient
+import com.auth0.client.mgmt.ClientGrantsClient
+import com.auth0.client.mgmt.ClientsClient
+import com.auth0.client.mgmt.ConnectionProfilesClient
+import com.auth0.client.mgmt.ConnectionsClient
+import com.auth0.client.mgmt.CustomDomainsClient
+import com.auth0.client.mgmt.DeviceCredentialsClient
+import com.auth0.client.mgmt.EmailTemplatesClient
+import com.auth0.client.mgmt.EventStreamsClient
+import com.auth0.client.mgmt.EventsClient
+import com.auth0.client.mgmt.FlowsClient
+import com.auth0.client.mgmt.FormsClient
+import com.auth0.client.mgmt.GroupsClient
+import com.auth0.client.mgmt.HooksClient
+import com.auth0.client.mgmt.JobsClient
+import com.auth0.client.mgmt.LogStreamsClient
+import com.auth0.client.mgmt.LogsClient
 import com.auth0.client.mgmt.ManagementApi
 import com.auth0.client.mgmt.ManagementApiBuilder
+import com.auth0.client.mgmt.NetworkAclsClient
+import com.auth0.client.mgmt.OrganizationsClient
+import com.auth0.client.mgmt.PromptsClient
+import com.auth0.client.mgmt.RateLimitPoliciesClient
+import com.auth0.client.mgmt.RefreshTokensClient
+import com.auth0.client.mgmt.ResourceServersClient
+import com.auth0.client.mgmt.RolesClient
+import com.auth0.client.mgmt.RulesClient
+import com.auth0.client.mgmt.RulesConfigsClient
+import com.auth0.client.mgmt.SelfServiceProfilesClient
+import com.auth0.client.mgmt.SessionsClient
+import com.auth0.client.mgmt.StatsClient
+import com.auth0.client.mgmt.SupplementalSignalsClient
+import com.auth0.client.mgmt.TicketsClient
+import com.auth0.client.mgmt.TokenExchangeProfilesClient
+import com.auth0.client.mgmt.UserAttributeProfilesClient
+import com.auth0.client.mgmt.UserBlocksClient
+import com.auth0.client.mgmt.UserGrantsClient
+import com.auth0.client.mgmt.UsersClient
+import com.auth0.client.mgmt.anomaly.AnomalyClient
+import com.auth0.client.mgmt.attackprotection.AttackProtectionClient
 import com.auth0.client.mgmt.core.Environment
 import com.auth0.client.mgmt.core.LogConfig
+import com.auth0.client.mgmt.emails.EmailsClient
+import com.auth0.client.mgmt.guardian.GuardianClient
+import com.auth0.client.mgmt.keys.KeysClient
+import com.auth0.client.mgmt.riskassessments.RiskAssessmentsClient
+import com.auth0.client.mgmt.tenants.TenantsClient
+import com.auth0.client.mgmt.verifiablecredentials.VerifiableCredentialsClient
 import com.auth0.net.Request
 import com.auth0.net.Response
 import com.auth0.net.client.Auth0HttpClient
@@ -16,184 +61,189 @@ import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.OkHttpClient
 
-object Auth0 {
-    fun auth(
+@DslMarker
+public annotation class Auth0Dsl
+
+public object Auth0 {
+    public fun auth(
         domain: String,
         clientId: String,
-        configure: AuthenticationConfig.() -> Unit = {}
+        configure: AuthenticationConfig.() -> Unit = {},
     ): AuthClient =
         AuthAPI.newBuilder(domain, clientId).configured(configure)
 
-    fun auth(
+    public fun auth(
         domain: String,
         clientId: String,
         clientSecret: String,
-        configure: AuthenticationConfig.() -> Unit = {}
+        configure: AuthenticationConfig.() -> Unit = {},
     ): AuthClient =
         AuthAPI.newBuilder(domain, clientId, clientSecret).configured(configure)
 
-    fun auth(
+    public fun auth(
         domain: String,
         clientId: String,
         signer: ClientAssertionSigner,
-        configure: AuthenticationConfig.() -> Unit = {}
+        configure: AuthenticationConfig.() -> Unit = {},
     ): AuthClient =
         AuthAPI.newBuilder(domain, clientId, signer).configured(configure)
 
-    fun managementWithToken(
+    public fun managementWithToken(
         domain: String,
         token: String,
-        configure: ManagementConfig.() -> Unit = {}
+        configure: ManagementConfig.() -> Unit = {},
     ): ManagementClient =
         ManagementApi.builder().domain(domain).token(token).configured(configure)
 
-    fun managementWithClientCredentials(
+    public fun managementWithClientCredentials(
         domain: String,
         clientId: String,
         clientSecret: String,
-        configure: ManagementConfig.() -> Unit = {}
+        configure: ManagementConfig.() -> Unit = {},
     ): ManagementClient =
         ManagementApi.builder().domain(domain).clientCredentials(clientId, clientSecret).configured(configure)
 
-    fun management(configure: ManagementConfig.() -> Unit): ManagementClient =
+    public fun management(configure: ManagementConfig.() -> Unit): ManagementClient =
         ManagementApi.builder().configured(configure)
 }
 
-class AuthenticationConfig internal constructor(private val builder: AuthAPI.Builder) {
-    fun httpClient(client: Auth0HttpClient) {
+@Auth0Dsl
+public class AuthenticationConfig internal constructor(private val builder: AuthAPI.Builder) {
+    public fun httpClient(client: Auth0HttpClient): Unit {
         builder.withHttpClient(client)
     }
 }
 
-class ManagementConfig internal constructor(private val builder: ManagementApiBuilder) {
-    fun domain(value: String) {
+@Auth0Dsl
+public class ManagementConfig internal constructor(private val builder: ManagementApiBuilder) {
+    public fun domain(value: String): Unit {
         builder.domain(value)
     }
 
-    fun url(value: String) {
+    public fun url(value: String): Unit {
         builder.url(value)
     }
 
-    fun environment(value: Environment) {
+    public fun environment(value: Environment): Unit {
         builder.environment(value)
     }
 
-    fun token(value: String) {
+    public fun token(value: String): Unit {
         builder.token(value)
     }
 
-    fun clientCredentials(clientId: String, clientSecret: String) {
+    public fun clientCredentials(clientId: String, clientSecret: String): Unit {
         builder.clientCredentials(clientId, clientSecret)
     }
 
-    fun audience(value: String) {
+    public fun audience(value: String): Unit {
         builder.audience(value)
     }
 
-    fun timeout(seconds: Int) {
+    public fun timeout(seconds: Int): Unit {
         builder.timeout(seconds)
     }
 
-    fun maxRetries(value: Int) {
+    public fun maxRetries(value: Int): Unit {
         builder.maxRetries(value)
     }
 
-    fun customDomain(value: String) {
+    public fun customDomain(value: String): Unit {
         builder.customDomain(value)
     }
 
-    fun httpClient(client: OkHttpClient) {
+    public fun httpClient(client: OkHttpClient): Unit {
         builder.httpClient(client)
     }
 
-    fun logging(config: LogConfig) {
+    public fun logging(config: LogConfig): Unit {
         builder.logging(config)
     }
 
-    fun header(name: String, value: String) {
+    public fun header(name: String, value: String): Unit {
         builder.addHeader(name, value)
     }
 }
 
-class AuthClient(val java: AuthAPI) {
-    fun authorizationUrl(
+public class AuthClient(public val java: AuthAPI) {
+    public fun authorizationUrl(
         redirectUri: String,
-        configure: AuthorizeUrlBuilder.() -> Unit = {}
+        configure: AuthorizeUrlBuilder.() -> Unit = {},
     ): String =
         java.authorizeUrl(redirectUri).apply(configure).build()
 
-    fun logoutUrl(
+    public fun logoutUrl(
         returnToUrl: String,
         includeClientId: Boolean = true,
-        configure: LogoutUrlBuilder.() -> Unit = {}
+        configure: LogoutUrlBuilder.() -> Unit = {},
     ): String =
         java.logoutUrl(returnToUrl, includeClientId).apply(configure).build()
 
-    inline fun <T> use(block: AuthAPI.() -> T): T =
+    public inline fun <T> use(block: AuthAPI.() -> T): T =
         java.block()
 }
 
-class ManagementClient(val java: ManagementApi) {
-    val actions get() = java.actions()
-    val branding get() = java.branding()
-    val clientGrants get() = java.clientGrants()
-    val clients get() = java.clients()
-    val connectionProfiles get() = java.connectionProfiles()
-    val connections get() = java.connections()
-    val customDomains get() = java.customDomains()
-    val deviceCredentials get() = java.deviceCredentials()
-    val emailTemplates get() = java.emailTemplates()
-    val eventStreams get() = java.eventStreams()
-    val events get() = java.events()
-    val flows get() = java.flows()
-    val forms get() = java.forms()
-    val userGrants get() = java.userGrants()
-    val groups get() = java.groups()
-    val hooks get() = java.hooks()
-    val jobs get() = java.jobs()
-    val logStreams get() = java.logStreams()
-    val logs get() = java.logs()
-    val networkAcls get() = java.networkAcls()
-    val organizations get() = java.organizations()
-    val prompts get() = java.prompts()
-    val rateLimitPolicies get() = java.rateLimitPolicies()
-    val refreshTokens get() = java.refreshTokens()
-    val resourceServers get() = java.resourceServers()
-    val roles get() = java.roles()
-    val rules get() = java.rules()
-    val rulesConfigs get() = java.rulesConfigs()
-    val selfServiceProfiles get() = java.selfServiceProfiles()
-    val sessions get() = java.sessions()
-    val stats get() = java.stats()
-    val supplementalSignals get() = java.supplementalSignals()
-    val tickets get() = java.tickets()
-    val tokenExchangeProfiles get() = java.tokenExchangeProfiles()
-    val userAttributeProfiles get() = java.userAttributeProfiles()
-    val userBlocks get() = java.userBlocks()
-    val users get() = java.users()
-    val anomaly get() = java.anomaly()
-    val attackProtection get() = java.attackProtection()
-    val emails get() = java.emails()
-    val guardian get() = java.guardian()
-    val keys get() = java.keys()
-    val riskAssessments get() = java.riskAssessments()
-    val tenants get() = java.tenants()
-    val verifiableCredentials get() = java.verifiableCredentials()
+public class ManagementClient(public val java: ManagementApi) {
+    public val actions: ActionsClient get() = java.actions()
+    public val branding: BrandingClient get() = java.branding()
+    public val clientGrants: ClientGrantsClient get() = java.clientGrants()
+    public val clients: ClientsClient get() = java.clients()
+    public val connectionProfiles: ConnectionProfilesClient get() = java.connectionProfiles()
+    public val connections: ConnectionsClient get() = java.connections()
+    public val customDomains: CustomDomainsClient get() = java.customDomains()
+    public val deviceCredentials: DeviceCredentialsClient get() = java.deviceCredentials()
+    public val emailTemplates: EmailTemplatesClient get() = java.emailTemplates()
+    public val eventStreams: EventStreamsClient get() = java.eventStreams()
+    public val events: EventsClient get() = java.events()
+    public val flows: FlowsClient get() = java.flows()
+    public val forms: FormsClient get() = java.forms()
+    public val userGrants: UserGrantsClient get() = java.userGrants()
+    public val groups: GroupsClient get() = java.groups()
+    public val hooks: HooksClient get() = java.hooks()
+    public val jobs: JobsClient get() = java.jobs()
+    public val logStreams: LogStreamsClient get() = java.logStreams()
+    public val logs: LogsClient get() = java.logs()
+    public val networkAcls: NetworkAclsClient get() = java.networkAcls()
+    public val organizations: OrganizationsClient get() = java.organizations()
+    public val prompts: PromptsClient get() = java.prompts()
+    public val rateLimitPolicies: RateLimitPoliciesClient get() = java.rateLimitPolicies()
+    public val refreshTokens: RefreshTokensClient get() = java.refreshTokens()
+    public val resourceServers: ResourceServersClient get() = java.resourceServers()
+    public val roles: RolesClient get() = java.roles()
+    public val rules: RulesClient get() = java.rules()
+    public val rulesConfigs: RulesConfigsClient get() = java.rulesConfigs()
+    public val selfServiceProfiles: SelfServiceProfilesClient get() = java.selfServiceProfiles()
+    public val sessions: SessionsClient get() = java.sessions()
+    public val stats: StatsClient get() = java.stats()
+    public val supplementalSignals: SupplementalSignalsClient get() = java.supplementalSignals()
+    public val tickets: TicketsClient get() = java.tickets()
+    public val tokenExchangeProfiles: TokenExchangeProfilesClient get() = java.tokenExchangeProfiles()
+    public val userAttributeProfiles: UserAttributeProfilesClient get() = java.userAttributeProfiles()
+    public val userBlocks: UserBlocksClient get() = java.userBlocks()
+    public val users: UsersClient get() = java.users()
+    public val anomaly: AnomalyClient get() = java.anomaly()
+    public val attackProtection: AttackProtectionClient get() = java.attackProtection()
+    public val emails: EmailsClient get() = java.emails()
+    public val guardian: GuardianClient get() = java.guardian()
+    public val keys: KeysClient get() = java.keys()
+    public val riskAssessments: RiskAssessmentsClient get() = java.riskAssessments()
+    public val tenants: TenantsClient get() = java.tenants()
+    public val verifiableCredentials: VerifiableCredentialsClient get() = java.verifiableCredentials()
 
-    inline fun <T> use(block: ManagementApi.() -> T): T =
+    public inline fun <T> use(block: ManagementApi.() -> T): T =
         java.block()
 }
 
-fun AuthAPI.asKotlin(): AuthClient =
+public fun AuthAPI.asKotlin(): AuthClient =
     AuthClient(this)
 
-fun ManagementApi.asKotlin(): ManagementClient =
+public fun ManagementApi.asKotlin(): ManagementClient =
     ManagementClient(this)
 
-fun <T> Request<T>.executeBody(): T? =
+public fun <T> Request<T>.executeBody(): T? =
     execute().body
 
-suspend fun <T> Request<T>.await(): Response<T> =
+public suspend fun <T> Request<T>.await(): Response<T> =
     suspendCancellableCoroutine { continuation ->
         val future = executeAsync()
         continuation.invokeOnCancellation { future.cancel(true) }
@@ -206,7 +256,7 @@ suspend fun <T> Request<T>.await(): Response<T> =
         }
     }
 
-suspend fun <T> Request<T>.awaitBody(): T? =
+public suspend fun <T> Request<T>.awaitBody(): T? =
     await().body
 
 private fun AuthAPI.Builder.configured(configure: AuthenticationConfig.() -> Unit): AuthClient {

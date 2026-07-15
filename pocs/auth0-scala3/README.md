@@ -13,6 +13,21 @@ This wrapper adds:
 
 This artifact is not an official Auth0 SDK. The wrapped Java dependency is the supported SDK.
 
+## Idiomatic Scala 3 Design
+
+The public API follows Scala 3 conventions:
+
+* Immutable `val` references hold the wrapped Java clients, while configuration functions isolate the mutation required by Java builders.
+* Default function arguments keep optional configuration concise without nullable sentinels.
+* Extension methods add `Future`, body, status, and wrapping operations to Java SDK types without inheritance.
+* `Option` represents a possibly absent Java response body, and `Future` represents asynchronous request completion.
+* A deliberate `export` clause exposes the selected Management API surface without repetitive forwarding methods or widening the wrapper to every Java member.
+* MUnit suites use normal sbt test discovery, structured assertions, and native `Future` test completion.
+
+## Idiomatic Audit Changes
+
+The audit replaced the manually forwarded Management API methods with a Scala 3 `export` facade, replaced the standalone test entry point with a discovered MUnit suite, removed blocking waits from asynchronous tests, and enabled deprecation, feature, unchecked, and unused-code compiler warnings.
+
 ## Status
 
 This wrapper is usable for server-side Scala 3 applications that want small Scala adapters over the official Java SDK. Management API calls retain the synchronous behavior of the Java SDK.
@@ -20,8 +35,7 @@ This wrapper is usable for server-side Scala 3 applications that want small Scal
 ## What Is Missing
 
 * `Future` adapters for synchronous Management API operations
-* Standard test discovery and structured test reporting; the current build runs a standalone test entry point
-* Explicit return types on the public wrapper surface for stronger API compatibility
+* Handwritten return types for the exported Management API methods when stronger binary compatibility than the Java facade provides is required
 * HTTP-level tests for error mapping, retries, and automatic token renewal
 * Session creation, callback processing, state and nonce verification, cookie handling, and JWT validation
 * Scala-native models and Management API method signatures independent of the Java SDK
@@ -47,8 +61,8 @@ val userInfo = auth.java.userInfo("access-token").bodyFuture
 
 ```scala
 val management = Auth0.managementWithToken("tenant.auth0.com", "access-token")
-val user = management.users.get("auth0|123")
-val roles = management.users.roles()
+val user = management.users().get("auth0|123")
+val roles = management.users().roles()
 ```
 
 Management configuration also uses Scala types:

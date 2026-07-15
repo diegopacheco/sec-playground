@@ -13,6 +13,21 @@ This wrapper adds:
 
 This artifact is not an official Auth0 SDK. The wrapped Java dependency is the supported SDK.
 
+## Idiomatic Kotlin Design
+
+The public API follows Kotlin library conventions:
+
+* `explicitApi()` makes every public visibility and return type deliberate and prevents accidental API changes caused by inferred Java types.
+* Receiver lambdas provide type-safe configuration blocks, default lambda arguments keep the common path concise, and named arguments remain available at call sites.
+* `@Auth0Dsl` marks configuration receivers as a Kotlin DSL and prevents accidental receiver mixing when configuration blocks are nested.
+* Wrapper state is exposed through immutable `val` properties, and Management API clients have explicit Kotlin property types.
+* Extension functions adapt existing Java clients and requests without inheritance or changes to the official SDK.
+* `await` uses cancellable suspension, propagates Java failures, and cancels the underlying future when the coroutine is cancelled.
+
+## Idiomatic Audit Changes
+
+The audit enabled explicit API mode, added explicit public signatures across the wrapper, added the DSL marker to authentication and management configuration receivers, and normalized multiline Kotlin declarations with trailing commas. The protocol and transport behavior remain delegated to the official Java SDK.
+
 ## Status
 
 This wrapper is usable for server-side Kotlin applications that want Kotlin configuration blocks and coroutine adapters for Authentication API requests. Management API calls retain the synchronous behavior of the Java SDK.

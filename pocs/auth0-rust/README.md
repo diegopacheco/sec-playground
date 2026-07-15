@@ -2,6 +2,22 @@
 
 Rust SDK for Auth0 Authentication API and Management API.
 
+## Idiomatic Rust Design
+
+The audit found the crate idiomatic without requiring source changes:
+
+- Builders own configurable construction and return `Result` when domains, clients, or requests can be invalid.
+- Read-only inputs use `&str`, `AsRef`, or borrowed requests where ownership is unnecessary, while stored values use owned `String` data.
+- Enums model HTTP methods, bodies, signing algorithms, passwordless modes, and API error categories with exhaustive matching.
+- `Auth0Error` composes lower-level failures through `From`, implements the standard error traits, and keeps recoverable failure in return types.
+- Iterator implementations provide lazy pagination, and collection transformations avoid manual indexing.
+- Client, token, lock, and transport lifetimes rely on ownership and scope-based cleanup.
+- Generated JSON models derive standard traits, and configurable clients use `Default` where a conventional baseline exists.
+
+## Idiomatic Audit Changes
+
+No Rust API rewrite was needed. The code already passed `cargo fmt --check` and `cargo clippy --all-targets --all-features -- -D warnings`; this README now records the ownership, error, enum, builder, iterator, and cleanup conventions that make the crate idiomatic.
+
 ## Scope
 
 This crate provides:

@@ -196,51 +196,52 @@ object AuthClient:
     new AuthClient(java)
 
 final class ManagementClient(val java: ManagementApi):
-  def actions = java.actions()
-  def branding = java.branding()
-  def clientGrants = java.clientGrants()
-  def clients = java.clients()
-  def connectionProfiles = java.connectionProfiles()
-  def connections = java.connections()
-  def customDomains = java.customDomains()
-  def deviceCredentials = java.deviceCredentials()
-  def emailTemplates = java.emailTemplates()
-  def eventStreams = java.eventStreams()
-  def events = java.events()
-  def flows = java.flows()
-  def forms = java.forms()
-  def userGrants = java.userGrants()
-  def groups = java.groups()
-  def hooks = java.hooks()
-  def jobs = java.jobs()
-  def logStreams = java.logStreams()
-  def logs = java.logs()
-  def networkAcls = java.networkAcls()
-  def organizations = java.organizations()
-  def prompts = java.prompts()
-  def rateLimitPolicies = java.rateLimitPolicies()
-  def refreshTokens = java.refreshTokens()
-  def resourceServers = java.resourceServers()
-  def roles = java.roles()
-  def rules = java.rules()
-  def rulesConfigs = java.rulesConfigs()
-  def selfServiceProfiles = java.selfServiceProfiles()
-  def sessions = java.sessions()
-  def stats = java.stats()
-  def supplementalSignals = java.supplementalSignals()
-  def tickets = java.tickets()
-  def tokenExchangeProfiles = java.tokenExchangeProfiles()
-  def userAttributeProfiles = java.userAttributeProfiles()
-  def userBlocks = java.userBlocks()
-  def users = java.users()
-  def anomaly = java.anomaly()
-  def attackProtection = java.attackProtection()
-  def emails = java.emails()
-  def guardian = java.guardian()
-  def keys = java.keys()
-  def riskAssessments = java.riskAssessments()
-  def tenants = java.tenants()
-  def verifiableCredentials = java.verifiableCredentials()
+  export java.{
+    actions,
+    anomaly,
+    attackProtection,
+    branding,
+    clientGrants,
+    clients,
+    connectionProfiles,
+    connections,
+    customDomains,
+    deviceCredentials,
+    emailTemplates,
+    emails,
+    eventStreams,
+    events,
+    flows,
+    forms,
+    groups,
+    guardian,
+    hooks,
+    jobs,
+    keys,
+    logStreams,
+    logs,
+    networkAcls,
+    organizations,
+    prompts,
+    rateLimitPolicies,
+    refreshTokens,
+    resourceServers,
+    riskAssessments,
+    roles,
+    rules,
+    rulesConfigs,
+    selfServiceProfiles,
+    sessions,
+    stats,
+    supplementalSignals,
+    tenants,
+    tickets,
+    tokenExchangeProfiles,
+    userAttributeProfiles,
+    userBlocks,
+    users,
+    verifiableCredentials
+  }
 
   def use[A](operation: ManagementApi => A): A =
     operation(java)

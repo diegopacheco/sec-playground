@@ -15,6 +15,7 @@ dependencies {
 }
 
 kotlin {
+    explicitApi()
     jvmToolchain(17)
     compilerOptions {
         freeCompilerArgs.add("-Xjsr305=strict")
