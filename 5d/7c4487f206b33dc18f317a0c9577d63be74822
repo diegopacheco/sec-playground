@@ -1,0 +1,19 @@
+pocs/auth0-webapp/README.md
+  s_43112e833c1adf::t_03f7981398c959 1-247
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5d7c4487f206b33dc18f317a0c9577d63be74822",
+  "prompts": {},
+  "sessions": {
+    "s_43112e833c1adf": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f67ab-982d-75c1-a8c4-ad51e9ce3565",
+        "model": "unknown"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
