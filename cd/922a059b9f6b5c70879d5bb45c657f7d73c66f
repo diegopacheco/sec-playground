@@ -1,0 +1,77 @@
+pocs/agent-intent-bound-tokens/test.sh
+  s_6706b5a85de97a::t_3fafdcfd5ce997 29
+  s_e96428f8cb0f75::t_8aa4a95e0ed9c0 10-12
+  s_e96428f8cb0f75::t_b076459da97b13 1-9,13-28,30-38
+pocs/agent-intent-bound-tokens/cmd/server/main.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-41
+pocs/agent-intent-bound-tokens/ui/src/main.tsx
+  s_6706b5a85de97a::t_50035aa4b9c367 1-10
+pocs/agent-intent-bound-tokens/ui/src/App.tsx
+  s_6706b5a85de97a::t_50035aa4b9c367 1-410
+pocs/agent-intent-bound-tokens/internal/verification/service_test.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-50
+pocs/agent-intent-bound-tokens/internal/httpapi/server_test.go
+  s_6706b5a85de97a::t_3fafdcfd5ce997 1-55
+pocs/agent-intent-bound-tokens/internal/intent/model.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-28
+pocs/agent-intent-bound-tokens/start.sh
+  s_e96428f8cb0f75::t_b076459da97b13 1-23
+pocs/agent-intent-bound-tokens/ui/index.html
+  s_6706b5a85de97a::t_50035aa4b9c367 1-13
+pocs/agent-intent-bound-tokens/README.md
+  s_6706b5a85de97a::t_01665b535d027f 34-35,38-56
+  s_e96428f8cb0f75::t_b076459da97b13 1-33,36-37,57-89
+pocs/agent-intent-bound-tokens/.gitignore
+  s_e96428f8cb0f75::t_30f3042762d9f8 1
+  s_6706b5a85de97a::t_01665b535d027f 2-3
+pocs/agent-intent-bound-tokens/internal/httpapi/server.go
+  s_6706b5a85de97a::t_3fafdcfd5ce997 35-39,46,52-63
+  s_e96428f8cb0f75::t_b076459da97b13 1-5,7-25,27-34,40-45,47-51,64-111,113-124
+  s_e96428f8cb0f75::t_afb1e8ff84d1de 26
+  s_e96428f8cb0f75::t_30f3042762d9f8 6,112
+pocs/agent-intent-bound-tokens/ui/vite.config.ts
+  s_6706b5a85de97a::t_50035aa4b9c367 1-17
+pocs/agent-intent-bound-tokens/internal/token/service.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-128
+pocs/agent-intent-bound-tokens/internal/token/service_test.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-69
+pocs/agent-intent-bound-tokens/stop.sh
+  s_e96428f8cb0f75::t_b076459da97b13 1-10
+pocs/agent-intent-bound-tokens/go.mod
+  s_e96428f8cb0f75::t_b076459da97b13 1-3
+pocs/agent-intent-bound-tokens/ui/package.json
+  s_6706b5a85de97a::t_50035aa4b9c367 1-22
+pocs/agent-intent-bound-tokens/internal/verification/service.go
+  s_e96428f8cb0f75::t_b076459da97b13 1-95
+pocs/agent-intent-bound-tokens/ui/src/styles.css
+  s_6706b5a85de97a::t_339900b41b389a 1-1069
+pocs/agent-intent-bound-tokens/ui/tsconfig.json
+  s_6706b5a85de97a::t_50035aa4b9c367 1-11,13-19
+  s_6706b5a85de97a::t_f90036d7811fa9 12
+pocs/agent-intent-bound-tokens/ui/bun.lock
+  s_6706b5a85de97a::t_247adf6fb94464 1-169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "cd922a059b9f6b5c70879d5bb45c657f7d73c66f",
+  "prompts": {},
+  "sessions": {
+    "s_6706b5a85de97a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f645b-7905-7b52-a586-88a985265cee",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    },
+    "s_e96428f8cb0f75": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f643f-e344-72a2-8999-824440e17c19",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
