@@ -200,12 +200,83 @@ Sensitive headers and bodies are redacted by default. Body logging requires an e
 - The crate does not create application sessions, process callbacks, verify state or nonce values, manage cookies, or validate JWT signatures and claims.
 - Unit tests use loopback HTTP servers and local request fixtures. Only `tests/auth0_integration.rs` reaches a live Auth0 tenant, and it covers the Authentication API alone.
 
+## Prerequisites
+
+### Toolchain
+
+| Requirement | Version | Notes |
+| --- | --- | --- |
+| Rust | 1.94 or newer | Pinned by `rust-version` in `Cargo.toml`, an older toolchain fails to build |
+| Edition | 2024 | Requires the 1.94 toolchain above |
+| Cargo | Ships with Rust | Resolves the crates in `Cargo.lock` |
+| Clippy and rustfmt | Ships with rustup | Used by the checks below |
+| Node.js | 20 or newer | Only for `sample-app/webapp`, which builds with Vite 8 and React 19 |
+
+Install or update through rustup, then verify:
+
+```bash
+rustup update stable
+rustc --version
+cargo --version
+node --version
+```
+
+TLS goes through `rustls`, not OpenSSL, so no system OpenSSL development package is needed.
+
+### Auth0 Account
+
+A free Auth0 account and one tenant are required. Nothing in this project runs against a live tenant without them.
+
+1. Create an account at https://auth0.com and note the tenant domain, shaped `your-tenant.us.auth0.com`.
+2. Create an application of type **Regular Web Application**.
+3. Copy the **Domain**, **Client ID**, and **Client Secret** from the application settings.
+4. Add `http://localhost:3000/login/oauth2/code/okta` to **Allowed Callback URLs**. The sample app server only accepts this path.
+5. Add `http://localhost:3000` to **Allowed Logout URLs**.
+
+The client secret is a server-side credential. The authorization code exchange runs on the server so the secret never reaches the browser.
+
+### Environment Script
+
+`auth0-env.sh` holds the tenant credentials and is listed in `.gitignore`, so a fresh clone does not contain it. Create it in this project root before running anything:
+
+```bash
+cat > auth0-env.sh <<'EOF'
+export AUTH0_DOMAIN=your-tenant.us.auth0.com
+export AUTH0_CLIENT_ID=your-client-id
+export AUTH0_CLIENT_SECRET=your-client-secret
+export AUTH0_REDIRECT_URI=http://localhost:3000/login/oauth2/code/okta
+EOF
+```
+
+Replace every placeholder with the values from step 3. Keep the file untracked, it carries a real secret.
+
+| Variable | Used by |
+| --- | --- |
+| `AUTH0_DOMAIN` | Client construction, authorization and logout URLs, Management API |
+| `AUTH0_CLIENT_ID` | Client construction, authorization URL |
+| `AUTH0_CLIENT_SECRET` | Authorization code exchange, client credentials |
+| `AUTH0_REDIRECT_URI` | Authorization URL and code exchange, must match the callback configured in Auth0 |
+
+Load it into the current shell:
+
+```bash
+source ./auth0-env.sh
+```
+
+`test-integration.sh` and `sample-app/start.sh` source this file themselves.
+
 ## Tests
 
-Run:
+Unit tests use loopback HTTP servers and need no tenant:
 
 ```bash
 cargo test
 cargo clippy --all-targets -- -D warnings
 cargo doc --no-deps
+```
+
+The single live tenant test in `tests/auth0_integration.rs` is marked `#[ignore]` and needs the environment script:
+
+```bash
+./test-integration.sh
 ```
