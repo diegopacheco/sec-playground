@@ -41,3 +41,5 @@ __pycache__/
 
 # IDE
 .idea/
+
+pocs/auth0-env.sh
