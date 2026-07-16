@@ -1,0 +1,25 @@
+pocs/auth0-kotlin/README.md
+  s_80fafc3c84b43a::t_cca401a5004999 129-191,197-202
+pocs/auth0-rust/README.md
+  s_80fafc3c84b43a::t_bf766fe3587d47 203-267,270,277,279-282
+  s_80fafc3c84b43a::t_6f8e7dcb72cced 278
+pocs/auth0-scala3/README.md
+  s_80fafc3c84b43a::t_ad44f2b29493a6 151
+  s_80fafc3c84b43a::t_df67a982022e92 144-150,152-204,210-215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7732dd314e19bc392a3bc83913ae5504c56e004b",
+  "prompts": {},
+  "sessions": {
+    "s_80fafc3c84b43a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "65642089-1a19-4c48-b0d0-7d947d1a1b07",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
