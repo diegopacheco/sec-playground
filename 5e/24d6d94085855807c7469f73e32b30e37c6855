@@ -1,0 +1,14 @@
+pocs/sonarq-cli-fun/INSTALL.md
+  h_8e2c3875396153 1-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "5e24d6d94085855807c7469f73e32b30e37c6855",
+  "prompts": {},
+  "humans": {
+    "h_8e2c3875396153": {
+      "author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
