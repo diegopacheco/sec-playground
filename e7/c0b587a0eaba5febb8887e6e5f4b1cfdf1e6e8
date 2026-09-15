@@ -1,0 +1,111 @@
+pocs/mcp-rug-pull-proxy/internal/sim/scenario.go
+  s_720e7f3fdf5372::t_3ada53f99420ca 1-210
+pocs/mcp-rug-pull-proxy/internal/sim/scenario_test.go
+  s_720e7f3fdf5372::t_50294f3fdb5ac1 1-44
+pocs/mcp-rug-pull-proxy/internal/fakeserver/tools.go
+  s_720e7f3fdf5372::t_df65b61fa1b70a 1-62
+pocs/mcp-rug-pull-proxy/internal/proxy/proxy.go
+  s_720e7f3fdf5372::t_a2339956a53346 1-191,194,196-249
+  s_720e7f3fdf5372::t_6b8a02b3983a85 192-193,195
+pocs/mcp-rug-pull-proxy/internal/proxy/guardclient.go
+  s_720e7f3fdf5372::t_4eb945ea4441af 1-66
+pocs/mcp-rug-pull-proxy/internal/pin/pin_test.go
+  s_720e7f3fdf5372::t_d890a3e5ba8e9d 1-38
+pocs/mcp-rug-pull-proxy/scripts/setup.sh
+  s_720e7f3fdf5372::t_26bd66aaf56e01 1-17
+pocs/mcp-rug-pull-proxy/scripts/common.sh
+  s_720e7f3fdf5372::t_5bef8e1b513bdb 1-129
+pocs/mcp-rug-pull-proxy/internal/guard/web/app.js
+  s_720e7f3fdf5372::t_3d195c4e99c712 392
+  s_720e7f3fdf5372::t_56093f6beff134 1-391,393-449
+pocs/mcp-rug-pull-proxy/internal/sim/admin.go
+  s_720e7f3fdf5372::t_9c702b559cc4ba 1-92
+pocs/mcp-rug-pull-proxy/scripts/test-all.sh
+  s_720e7f3fdf5372::t_48ca73ee8d9f30 1-30
+pocs/mcp-rug-pull-proxy/internal/proxy/proxy_test.go
+  s_720e7f3fdf5372::t_4c928e1c170c1a 1-195
+  s_720e7f3fdf5372::t_4b7ee9e40d4c13 196-218
+pocs/mcp-rug-pull-proxy/cmd/guard/main.go
+  s_720e7f3fdf5372::t_fbd65875d77898 1-34
+pocs/mcp-rug-pull-proxy/internal/guard/server_test.go
+  s_720e7f3fdf5372::t_f50ab97cf459c2 1-92
+pocs/mcp-rug-pull-proxy/internal/store/store.go
+  s_720e7f3fdf5372::t_82f02f19af615f 179
+  s_720e7f3fdf5372::t_a347635b368070 1-147,151-161,163-168,170-178,180-333,346-381
+  s_720e7f3fdf5372::t_81b5ee196ff097 162,169
+  s_720e7f3fdf5372::t_2a6854d5f61313 148-150
+  s_720e7f3fdf5372::t_3d195c4e99c712 334-345
+pocs/mcp-rug-pull-proxy/scripts/start-all.sh
+  s_720e7f3fdf5372::t_55b155a922ddda 1-23
+pocs/mcp-rug-pull-proxy/scripts/ui.sh
+  s_720e7f3fdf5372::t_9cfc22b2576d4c 1-10
+pocs/mcp-rug-pull-proxy/diagram/architecture.html
+  s_720e7f3fdf5372::t_e913a70f30a412 1-94
+pocs/mcp-rug-pull-proxy/README.md
+  s_720e7f3fdf5372::t_68e9e758e1bf09 185
+  s_720e7f3fdf5372::t_543ff7531dccb4 1-102,104-184,186-210
+  s_720e7f3fdf5372::t_916c3def0b736c 103
+pocs/mcp-rug-pull-proxy/cmd/client-sim/main.go
+  s_720e7f3fdf5372::t_8aa137f2fe93ff 1-74
+pocs/mcp-rug-pull-proxy/scripts/ports.env
+  s_720e7f3fdf5372::t_c135c9df9142d0 1
+pocs/mcp-rug-pull-proxy/internal/sim/client.go
+  s_720e7f3fdf5372::t_1a401ead1505c5 1-175
+pocs/mcp-rug-pull-proxy/logo.svg
+  s_720e7f3fdf5372::t_46782145a4bcfc 1-8
+pocs/mcp-rug-pull-proxy/scripts/stop-all.sh
+  s_720e7f3fdf5372::t_93592f376c3e9c 1-16
+pocs/mcp-rug-pull-proxy/go.mod
+  s_720e7f3fdf5372::t_1efe7fb6a734e2 1-3
+pocs/mcp-rug-pull-proxy/internal/scan/scan.go
+  s_720e7f3fdf5372::t_f2058a89378858 1-256,258,260,262-342
+  s_720e7f3fdf5372::t_39a4bdce530443 257,259,261
+pocs/mcp-rug-pull-proxy/internal/fakeserver/server.go
+  s_720e7f3fdf5372::t_db8120ffad8888 1-121
+pocs/mcp-rug-pull-proxy/internal/store/events.go
+  s_720e7f3fdf5372::t_7b229624334d28 1-95
+pocs/mcp-rug-pull-proxy/internal/guard/web/favicon.svg
+  s_720e7f3fdf5372::t_517adcb4644d53 1
+pocs/mcp-rug-pull-proxy/cmd/fake-upstream/main.go
+  s_720e7f3fdf5372::t_e42aa58336037f 1-24
+pocs/mcp-rug-pull-proxy/cmd/proxy/main.go
+  s_720e7f3fdf5372::t_46d97cdfab85c8 1-79
+pocs/mcp-rug-pull-proxy/internal/guard/web/style.css
+  s_720e7f3fdf5372::t_6b6b469324fb69 1-20,23-214
+  s_720e7f3fdf5372::t_7ab4df78cee469 21-22
+pocs/mcp-rug-pull-proxy/internal/guard/server.go
+  s_720e7f3fdf5372::t_183aa59185e466 1-117,119-211
+  s_720e7f3fdf5372::t_3d195c4e99c712 118
+pocs/mcp-rug-pull-proxy/scripts/status.sh
+  s_720e7f3fdf5372::t_19d0901c0a1c37 1-14
+pocs/mcp-rug-pull-proxy/internal/guard/tokens.go
+  s_720e7f3fdf5372::t_a6f000866f6130 1-41
+pocs/mcp-rug-pull-proxy/internal/mcp/mcp.go
+  s_720e7f3fdf5372::t_9463fa6ac25119 1-137
+pocs/mcp-rug-pull-proxy/internal/guard/web/index.html
+  s_720e7f3fdf5372::t_3ca46bc7c7d26c 1-63
+pocs/mcp-rug-pull-proxy/internal/pin/pin.go
+  s_720e7f3fdf5372::t_e00b8488fe41c8 1-41
+pocs/mcp-rug-pull-proxy/internal/scan/scan_test.go
+  s_720e7f3fdf5372::t_59877e5d1c5d94 1-119
+pocs/mcp-rug-pull-proxy/internal/store/store_test.go
+  s_720e7f3fdf5372::t_0552d5369f03c1 1-176
+pocs/mcp-rug-pull-proxy/.gitignore
+  s_720e7f3fdf5372::t_21e095dda8ae04 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e7c0b587a0eaba5febb8887e6e5f4b1cfdf1e6e8",
+  "prompts": {},
+  "sessions": {
+    "s_720e7f3fdf5372": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dfe8dbe2-3b1d-4f7d-b622-c751b64b399b",
+        "model": "unknown"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
