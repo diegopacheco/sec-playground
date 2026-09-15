@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Credential Broker</title>
+<link rel="icon" href="logo.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="logo.svg" alt="" class="brand-mark">
+    <div>
+      <div class="brand-name">Agent Credential Broker</div>
+      <div class="brand-sub">The agent asks. You approve. The broker holds the key.</div>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="approvals">Approvals <span class="count" id="pending-count">0</span></button>
+  <button class="tab" data-tab="credentials">Credentials</button>
+  <button class="tab" data-tab="audit">Audit chain</button>
+  <button class="tab" data-tab="lab">Attack lab</button>
+</nav>
+<main>
+  <section id="lock" class="lock" hidden>
+    <div class="card lock-card">
+      <h2>Admin token required</h2>
+      <p class="muted">Open the link printed by <code>scripts/start-all.sh</code>, or paste the token from <code>.run/data/admin-token</code>.</p>
+      <form id="lock-form" class="row">
+        <input id="lock-input" type="password" placeholder="admin token" autocomplete="off">
+        <button class="btn primary" type="submit">Unlock</button>
+      </form>
+    </div>
+  </section>
+  <section id="panel-approvals" class="panel"></section>
+  <section id="panel-credentials" class="panel" hidden></section>
+  <section id="panel-audit" class="panel" hidden></section>
+  <section id="panel-lab" class="panel" hidden></section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

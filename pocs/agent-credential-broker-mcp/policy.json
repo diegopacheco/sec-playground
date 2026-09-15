@@ -1,0 +1,40 @@
+{
+  "credentials": [
+    {
+      "name": "vendor-api",
+      "description": "Support vendor API key, read profile and open tickets",
+      "provider": "vault",
+      "path": "agent/vendor-api",
+      "field": "api_key",
+      "inject": { "header": "Authorization", "template": "Bearer {{credential}}" },
+      "allow": [
+        { "scheme": "http", "host": "${UPSTREAM_HOST}", "methods": ["GET", "POST"], "path_prefix": "/v1/" }
+      ],
+      "approval": "human"
+    },
+    {
+      "name": "vendor-status",
+      "description": "Same vendor key restricted to the read only profile endpoint",
+      "provider": "vault",
+      "path": "agent/vendor-api",
+      "field": "api_key",
+      "inject": { "header": "Authorization", "template": "Bearer {{credential}}" },
+      "allow": [
+        { "scheme": "http", "host": "${UPSTREAM_HOST}", "methods": ["GET"], "path_prefix": "/v1/profile" }
+      ],
+      "approval": "auto"
+    },
+    {
+      "name": "github-readonly",
+      "description": "GitHub fine grained token stored in the macOS Keychain",
+      "provider": "keychain",
+      "service": "agent-credential-broker",
+      "account": "github-readonly",
+      "inject": { "header": "Authorization", "template": "Bearer {{credential}}" },
+      "allow": [
+        { "scheme": "https", "host": "api.github.com", "methods": ["GET"], "path_prefix": "/repos/" }
+      ],
+      "approval": "human"
+    }
+  ]
+}
