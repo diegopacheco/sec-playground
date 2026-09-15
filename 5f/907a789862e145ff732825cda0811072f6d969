@@ -1,0 +1,108 @@
+pocs/agent-credential-broker-mcp/internal/httpapi/web/style.css
+  s_720e7f3fdf5372::t_01808611bca968 225-226
+  s_720e7f3fdf5372::t_ee48cdd1881343 1-224,228-253
+  s_720e7f3fdf5372::t_860d2414f67715 227
+pocs/agent-credential-broker-mcp/internal/mcp/server.go
+  s_720e7f3fdf5372::t_d7983c6b9a56bd 1-197
+pocs/agent-credential-broker-mcp/internal/broker/broker_test.go
+  s_720e7f3fdf5372::t_9a250ff7679793 1-213
+pocs/agent-credential-broker-mcp/internal/intent/token.go
+  s_720e7f3fdf5372::t_f389c17dadef24 1-110
+pocs/agent-credential-broker-mcp/scripts/test-all.sh
+  s_720e7f3fdf5372::t_91f21818a1b66e 1-27
+pocs/agent-credential-broker-mcp/scripts/setup.sh
+  s_720e7f3fdf5372::t_07e3451fc253d0 1-24
+pocs/agent-credential-broker-mcp/internal/intent/token_test.go
+  s_720e7f3fdf5372::t_9f663489d0bd2c 1-81
+pocs/agent-credential-broker-mcp/scripts/ports.env
+  s_720e7f3fdf5372::t_65dfae27fe765a 1-3
+pocs/agent-credential-broker-mcp/internal/httpapi/web/index.html
+  s_720e7f3fdf5372::t_044b140e9dfc8e 1-45
+pocs/agent-credential-broker-mcp/policy.json
+  s_720e7f3fdf5372::t_81288beafbf6ae 1-40
+pocs/agent-credential-broker-mcp/internal/lab/lab.go
+  s_720e7f3fdf5372::t_19593f1339795e 1-132
+pocs/agent-credential-broker-mcp/go.mod
+  s_720e7f3fdf5372::t_f98214e0c3009f 1-3
+pocs/agent-credential-broker-mcp/internal/httpapi/server.go
+  s_720e7f3fdf5372::t_faf9f1da19f3f5 1-161
+pocs/agent-credential-broker-mcp/internal/redact/redact_test.go
+  s_720e7f3fdf5372::t_948f7b331aa8e9 1-38
+pocs/agent-credential-broker-mcp/cmd/mcp/main.go
+  s_720e7f3fdf5372::t_88e8e9669e5916 1-21
+pocs/agent-credential-broker-mcp/internal/provider/provider.go
+  s_720e7f3fdf5372::t_c02c1923b9aa16 1-101
+pocs/agent-credential-broker-mcp/scripts/start-all.sh
+  s_720e7f3fdf5372::t_ec3c499c8441f0 1-59
+pocs/agent-credential-broker-mcp/internal/policy/policy.go
+  s_720e7f3fdf5372::t_c37e4a0b6cd93b 1-89
+pocs/agent-credential-broker-mcp/internal/policy/policy_test.go
+  s_720e7f3fdf5372::t_2d37394f12ff9a 1-33
+pocs/agent-credential-broker-mcp/logo.svg
+  s_720e7f3fdf5372::t_e82c191a13d26e 1-6
+pocs/agent-credential-broker-mcp/internal/httpapi/web/logo.svg
+  s_720e7f3fdf5372::t_24a06a97479998 1-6
+pocs/agent-credential-broker-mcp/internal/broker/broker.go
+  s_720e7f3fdf5372::t_8903adf77052f9 1-350
+pocs/agent-credential-broker-mcp/scripts/common.sh
+  s_720e7f3fdf5372::t_aab6954e80c345 1-146
+pocs/agent-credential-broker-mcp/internal/audit/audit_test.go
+  s_720e7f3fdf5372::t_b2354b2fdc193b 1-54
+pocs/agent-credential-broker-mcp/internal/redact/redact.go
+  s_720e7f3fdf5372::t_10cabca4f770e0 1-47
+pocs/agent-credential-broker-mcp/internal/httpapi/web/app.js
+  s_720e7f3fdf5372::t_d004495f8e463f 18
+  s_720e7f3fdf5372::t_ca36a80e103e63 169
+  s_720e7f3fdf5372::t_737a6ba4bd75ed 170-173
+  s_720e7f3fdf5372::t_7f89a57b152b21 1-17,19-168,174-267
+pocs/agent-credential-broker-mcp/diagram/architecture.html
+  s_720e7f3fdf5372::t_8aba7ae0b00f2a 1-90,92-108
+  s_720e7f3fdf5372::t_a308e1665611c1 91
+pocs/agent-credential-broker-mcp/cmd/upstream/main.go
+  s_720e7f3fdf5372::t_9fc12d32099904 1-8,11-21,23-24
+  s_720e7f3fdf5372::t_1f35aca06bf6e2 9-10,22
+pocs/agent-credential-broker-mcp/scripts/ui.sh
+  s_720e7f3fdf5372::t_131f29eb78d3cd 1-10
+pocs/agent-credential-broker-mcp/scripts/stop-all.sh
+  s_720e7f3fdf5372::t_5f4132243b917a 1-23
+pocs/agent-credential-broker-mcp/scripts/status.sh
+  s_720e7f3fdf5372::t_0c715bdead38b2 1-14
+pocs/agent-credential-broker-mcp/internal/mcp/server_test.go
+  s_720e7f3fdf5372::t_17c4c601b182f6 1-136
+pocs/agent-credential-broker-mcp/e2e/live_test.go
+  s_720e7f3fdf5372::t_758d4f4e73a87b 1-94
+pocs/agent-credential-broker-mcp/internal/egress/egress_test.go
+  s_720e7f3fdf5372::t_7e55d41a51a107 1-60
+pocs/agent-credential-broker-mcp/.gitignore
+  s_720e7f3fdf5372::t_ddebe760463109 1-2
+pocs/agent-credential-broker-mcp/README.md
+  s_720e7f3fdf5372::t_3066e34080d3e0 1-248
+pocs/agent-credential-broker-mcp/internal/lab/lab_test.go
+  s_720e7f3fdf5372::t_6ca22d49572b8c 1-72
+pocs/agent-credential-broker-mcp/internal/egress/egress.go
+  s_720e7f3fdf5372::t_db146599ff12a9 1-65
+pocs/agent-credential-broker-mcp/cmd/broker/main.go
+  s_720e7f3fdf5372::t_f304c7bce98aa7 1-59
+pocs/agent-credential-broker-mcp/internal/audit/audit.go
+  s_720e7f3fdf5372::t_65bb6f12325811 1-101
+pocs/agent-credential-broker-mcp/internal/provider/provider_test.go
+  s_720e7f3fdf5372::t_9433e717b6370a 1-54
+pocs/agent-credential-broker-mcp/internal/vendor/vendor.go
+  s_720e7f3fdf5372::t_7b7efc62eb668b 1-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5f907a789862e145ff732825cda0811072f6d969",
+  "prompts": {},
+  "sessions": {
+    "s_720e7f3fdf5372": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dfe8dbe2-3b1d-4f7d-b622-c751b64b399b",
+        "model": "unknown"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
