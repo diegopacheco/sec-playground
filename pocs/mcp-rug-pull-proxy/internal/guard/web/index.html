@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP Rug Pull Proxy</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="favicon.svg" alt="" class="brand-mark">
+    <div>
+      <div class="brand-name">MCP Rug Pull Proxy</div>
+      <div class="brand-sub">Pins every tool definition. Blocks silent changes and poisoned descriptions.</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span id="chain-pill" class="pill pill-muted">chain loading</span>
+    <span id="token-state"></span>
+  </div>
+</header>
+
+<section class="stats" id="stats"></section>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="tools">Tools</button>
+  <button class="tab" data-tab="alerts">Alerts <span class="count" id="alert-count" hidden>0</span></button>
+  <button class="tab" data-tab="scanner">Scanner</button>
+  <button class="tab" data-tab="events">Events</button>
+</nav>
+
+<main>
+  <section id="tab-tools" class="panel"></section>
+  <section id="tab-alerts" class="panel" hidden></section>
+  <section id="tab-scanner" class="panel" hidden>
+    <div class="scanner">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Scan a tool definition</h2>
+            <p class="muted">Paste the JSON of one MCP tool, as returned by tools/list. Nothing is stored.</p>
+          </div>
+        </div>
+        <textarea id="scan-input" spellcheck="false" placeholder='{"name": "my_tool", "description": "...", "inputSchema": {...}}'></textarea>
+        <div class="row gap">
+          <button class="btn btn-primary" id="scan-run">Scan</button>
+          <button class="btn" id="scan-poisoned">Load poisoned tool</button>
+          <button class="btn" id="scan-shadow">Load shadowing tool</button>
+          <button class="btn" id="scan-clean">Load clean tool</button>
+        </div>
+      </div>
+      <div id="scan-result"></div>
+    </div>
+  </section>
+  <section id="tab-events" class="panel" hidden></section>
+</main>
+
+<div id="toast" class="toast" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
