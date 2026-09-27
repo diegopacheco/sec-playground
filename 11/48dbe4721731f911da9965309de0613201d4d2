@@ -1,0 +1,20 @@
+README.md
+  s_9df6e7758c993c::t_27a4cda52efb83 2-127,129-140
+  s_9df6e7758c993c::t_2357571f0911b2 128
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1148dbe4721731f911da9965309de0613201d4d2",
+  "prompts": {},
+  "sessions": {
+    "s_9df6e7758c993c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a10eb5b-800f-4013-9c19-994e9a16983f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
