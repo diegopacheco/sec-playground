@@ -1,0 +1,211 @@
+pocs/passkey-poc/scripts/ui.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-12
+pocs/passkey-poc/e2e/package.json
+  s_b2d595c52a95f3::t_00392364c03b98 1-7
+pocs/passkey-poc/diagram/architecture.html
+  s_b2d595c52a95f3::t_a86b84fa9d5bab 84
+  s_b2d595c52a95f3::t_3c81f0e13ce2e0 1-20,22-81,85-96
+  s_b2d595c52a95f3::t_f6f2161e824acb 21,82-83
+pocs/passkey-poc/passkey-server/internal/webauthn/clientdata.go
+  s_b2d595c52a95f3::t_604a89332940fc 1-45
+pocs/passkey-poc/apps/vault/api/src/routes.ts
+  s_b2d595c52a95f3::t_18b20100fd3c21 1-40
+pocs/passkey-poc/passkey-server/internal/cose/key_test.go
+  s_b2d595c52a95f3::t_648faae25938f6 1-29
+pocs/passkey-poc/passkey-server/internal/webauthn/register.go
+  s_b2d595c52a95f3::t_ce0a0b6ca3a996 1-139
+pocs/passkey-poc/scripts/stop-all.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-18
+pocs/passkey-poc/apps/bookstore/web/src/views/auth.ts
+  s_b2d595c52a95f3::t_5771e6f9d31cb9 1-5,7-34
+  s_b2d595c52a95f3::t_40c017ea03f8dd 6
+pocs/passkey-poc/apps/bookstore/web/vite.config.ts
+  s_b2d595c52a95f3::t_a1f91f3c5610b2 1-15
+pocs/passkey-poc/apps/vault/web/src/unlock.ts
+  s_b2d595c52a95f3::t_40c017ea03f8dd 24
+  s_b2d595c52a95f3::t_ef8a8cce02a732 1-23,25-26
+pocs/passkey-poc/README.md
+  s_b2d595c52a95f3::t_deb095196c9247 57
+  s_b2d595c52a95f3::t_765e3ba58f94c1 1-56,58-173,175-242
+  s_b2d595c52a95f3::t_cdc9f0a7321596 174
+pocs/passkey-poc/logo.svg
+  s_b2d595c52a95f3::t_3c81f0e13ce2e0 1
+pocs/passkey-poc/apps/vault/web/package.json
+  s_b2d595c52a95f3::t_65b6fe855e3fc6 1-9
+pocs/passkey-poc/scripts/test-all.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-31
+pocs/passkey-poc/tsconfig.json
+  s_b2d595c52a95f3::t_92d4a8dff1cff6 1-16
+pocs/passkey-poc/apps/vault/api/test/routes.test.ts
+  s_b2d595c52a95f3::t_8c0923ba4477bd 1-66
+pocs/passkey-poc/passkey-server/cmd/passkey-server/main.go
+  s_b2d595c52a95f3::t_9bdd406f192a06 1-51
+pocs/passkey-poc/apps/vault/api/package.json
+  s_b2d595c52a95f3::t_65b6fe855e3fc6 1-8
+pocs/passkey-poc/apps/vault/web/src/views/vault.ts
+  s_b2d595c52a95f3::t_d3b460d1ee285a 70
+  s_b2d595c52a95f3::t_e48ab586dcee36 1-69,71-129
+pocs/passkey-poc/apps/bookstore/web/src/views/shop.ts
+  s_b2d595c52a95f3::t_defd9e5ad376c3 9,49
+  s_b2d595c52a95f3::t_e6562bcf7f3696 1-8,10-48,50-118
+pocs/passkey-poc/apps/vault/web/src/crypto.ts
+  s_b2d595c52a95f3::t_481f5ff79dec58 1-44
+pocs/passkey-poc/packages/passkey-client/src/base64url.ts
+  s_b2d595c52a95f3::t_cc8bedf6d80df4 1-14
+pocs/passkey-poc/packages/passkey-client/src/index.ts
+  s_b2d595c52a95f3::t_11bdeef07bbaac 1-2
+pocs/passkey-poc/apps/bookstore/web/src/api.ts
+  s_b2d595c52a95f3::t_dcbc910c68591c 1-33
+pocs/passkey-poc/apps/vault/web/vite.config.ts
+  s_b2d595c52a95f3::t_a1f91f3c5610b2 1-15
+pocs/passkey-poc/packages/session-guard/test/guard.test.ts
+  s_b2d595c52a95f3::t_36f412da07a49e 1-19
+pocs/passkey-poc/package.json
+  s_b2d595c52a95f3::t_00392364c03b98 5-10
+  s_b2d595c52a95f3::t_92d4a8dff1cff6 1-4,11-18
+pocs/passkey-poc/packages/passkey-client/test/base64url.test.ts
+  s_b2d595c52a95f3::t_11bdeef07bbaac 1-12
+pocs/passkey-poc/passkey-server/internal/cbor/decode.go
+  s_b2d595c52a95f3::t_53baa86870598e 59-61
+  s_b2d595c52a95f3::t_2152fe5be27db3 1-58,62-190
+pocs/passkey-poc/passkey-server/internal/cose/key.go
+  s_b2d595c52a95f3::t_42d5f9ecb183a9 1-177
+pocs/passkey-poc/passkey-server/internal/softauth/softauth.go
+  s_b2d595c52a95f3::t_b1fc9e6e25810b 27,115-117
+  s_b2d595c52a95f3::t_2ffb1ac2125b8e 1-26,28-114,118-123
+pocs/passkey-poc/passkey-server/internal/api/server_test.go
+  s_b2d595c52a95f3::t_f3bc407018c801 1-68,73-81,86-155,157-183
+  s_b2d595c52a95f3::t_0c3f95734a3b34 69-72,82-85
+  s_b2d595c52a95f3::t_f9d7e7cafc0648 156
+pocs/passkey-poc/packages/session-guard/src/index.ts
+  s_b2d595c52a95f3::t_b53fe1eb88fbac 1-7,9-47
+  s_b2d595c52a95f3::t_2eb959e565222b 8
+pocs/passkey-poc/passkey-server/internal/api/server.go
+  s_b2d595c52a95f3::t_8e1ab565e5dd1c 1-320
+pocs/passkey-poc/apps/vault/api/src/server.ts
+  s_b2d595c52a95f3::t_a8bcabd3e87b73 1-10
+pocs/passkey-poc/apps/vault/web/src/generator.ts
+  s_b2d595c52a95f3::t_6bd7be08e75297 1-38
+pocs/passkey-poc/apps/vault/web/src/main.ts
+  s_b2d595c52a95f3::t_e4f42431e8a67c 1-71
+pocs/passkey-poc/passkey-server/internal/cbor/cbor_test.go
+  s_b2d595c52a95f3::t_defec6518a6f96 1-63,65-86
+  s_b2d595c52a95f3::t_3e85c241f3ae97 64
+pocs/passkey-poc/apps/vault/web/index.html
+  s_b2d595c52a95f3::t_a5c3e26136f1d1 1-14
+pocs/passkey-poc/apps/bookstore/api/test/routes.test.ts
+  s_b2d595c52a95f3::t_3eec9ffad9f098 1-51
+pocs/passkey-poc/apps/vault/web/src/style.css
+  s_b2d595c52a95f3::t_ead351ce30d300 1-95,98-105
+  s_b2d595c52a95f3::t_177de98effc696 96-97
+pocs/passkey-poc/.gitignore
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-5
+pocs/passkey-poc/apps/bookstore/api/src/catalog.ts
+  s_b2d595c52a95f3::t_8bad8e0dcffae3 1-16
+pocs/passkey-poc/packages/passkey-client/package.json
+  s_b2d595c52a95f3::t_92d4a8dff1cff6 1-7
+  s_b2d595c52a95f3::t_092058f56fbcf3 8-10
+pocs/passkey-poc/apps/vault/web/src/env.d.ts
+  s_b2d595c52a95f3::t_1c9c9384e196e3 1
+pocs/passkey-poc/passkey-server/internal/session/session.go
+  s_b2d595c52a95f3::t_f69291d7ad7ee7 1-117
+pocs/passkey-poc/apps/bookstore/api/src/shop.ts
+  s_b2d595c52a95f3::t_1b09461433f8c8 1-45
+pocs/passkey-poc/packages/session-guard/package.json
+  s_b2d595c52a95f3::t_92d4a8dff1cff6 1-7
+pocs/passkey-poc/apps/bookstore/web/package.json
+  s_b2d595c52a95f3::t_65b6fe855e3fc6 1-9
+pocs/passkey-poc/scripts/start-all.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-23
+pocs/passkey-poc/packages/passkey-client/src/passkey.ts
+  s_b2d595c52a95f3::t_d45f15d6622c46 1-56,58-69,71-120,122-137
+  s_b2d595c52a95f3::t_bf962c303bf853 121
+  s_b2d595c52a95f3::t_40c017ea03f8dd 57,70
+pocs/passkey-poc/apps/bookstore/api/src/routes.ts
+  s_b2d595c52a95f3::t_35c0e16f61815f 1-33
+pocs/passkey-poc/e2e/passkey.e2e.ts
+  s_b2d595c52a95f3::t_ac18502d746f93 44-45
+  s_b2d595c52a95f3::t_e64742cdc9a3d9 17-19
+  s_b2d595c52a95f3::t_88a654df2228e5 7,84,95-96
+  s_b2d595c52a95f3::t_a4088de5455246 39,93,143,146-147
+  s_b2d595c52a95f3::t_953035912612f5 1-6,8-16,20-38,40-43,46-83,85-92,94,97-104,107-124,126-142,144-145,148-163
+  s_b2d595c52a95f3::t_05adcc0c3246ef 105-106,125
+pocs/passkey-poc/apps/vault/web/src/api.ts
+  s_b2d595c52a95f3::t_06f9a47addaae4 1-25
+pocs/passkey-poc/passkey-server/internal/webauthn/webauthn_test.go
+  s_b2d595c52a95f3::t_c8da8d53b210d6 1-61,63-67,69-75,77-137,139,141,146-169
+  s_b2d595c52a95f3::t_b1fc9e6e25810b 138,140,142-145
+  s_b2d595c52a95f3::t_8685f933b6222d 62,68,76
+pocs/passkey-poc/scripts/status.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-18
+pocs/passkey-poc/passkey-server/internal/store/store.go
+  s_b2d595c52a95f3::t_0a1a984e5935cb 1-122
+pocs/passkey-poc/passkey-server/internal/session/session_test.go
+  s_b2d595c52a95f3::t_b8265c83946d25 1-40
+pocs/passkey-poc/apps/bookstore/web/src/main.ts
+  s_b2d595c52a95f3::t_7f874c368d17d0 1-66
+pocs/passkey-poc/apps/bookstore/web/public/favicon.svg
+  s_b2d595c52a95f3::t_d8944c80249af6 1
+pocs/passkey-poc/scripts/ports.env
+  s_b2d595c52a95f3::t_af5b059e53f6b3 1-5
+pocs/passkey-poc/apps/bookstore/api/src/server.ts
+  s_b2d595c52a95f3::t_79976592ca5573 1-8
+pocs/passkey-poc/scripts/common.sh
+  s_b2d595c52a95f3::t_af5b059e53f6b3 1-142
+pocs/passkey-poc/apps/vault/web/test/crypto.test.ts
+  s_b2d595c52a95f3::t_7c504430395a16 1-21,23-27,29-51
+  s_b2d595c52a95f3::t_978309fb11e89c 22,28
+pocs/passkey-poc/apps/bookstore/api/package.json
+  s_b2d595c52a95f3::t_65b6fe855e3fc6 1-8
+pocs/passkey-poc/passkey-server/internal/webauthn/authdata.go
+  s_b2d595c52a95f3::t_d07735cc7a4776 1-102
+pocs/passkey-poc/apps/vault/web/src/views/lock.ts
+  s_b2d595c52a95f3::t_b2aacf3aaa5ffb 1-37
+pocs/passkey-poc/apps/vault/web/public/favicon.svg
+  s_b2d595c52a95f3::t_a5c3e26136f1d1 1
+pocs/passkey-poc/apps/bookstore/web/src/style.css
+  s_b2d595c52a95f3::t_f52014caaec649 1-123,126-135
+  s_b2d595c52a95f3::t_177de98effc696 124-125
+pocs/passkey-poc/passkey-server/internal/webauthn/options.go
+  s_b2d595c52a95f3::t_d21d3dc0327918 1-107
+pocs/passkey-poc/passkey-server/internal/webauthn/login.go
+  s_b2d595c52a95f3::t_f054361d66ce10 1-50
+pocs/passkey-poc/passkey-server/go.mod
+  s_b2d595c52a95f3::t_25aa685c31184a 1-3
+pocs/passkey-poc/apps/bookstore/web/index.html
+  s_b2d595c52a95f3::t_98f173cb4264ab 1-14
+pocs/passkey-poc/passkey-server/internal/store/store_test.go
+  s_b2d595c52a95f3::t_ae784bc541e528 1-53
+pocs/passkey-poc/passkey-server/internal/cbor/encode.go
+  s_b2d595c52a95f3::t_baffd6f46c4443 1-7,9-73,75-76,78-84
+  s_b2d595c52a95f3::t_3e85c241f3ae97 8,74,77
+pocs/passkey-poc/apps/bookstore/web/src/env.d.ts
+  s_b2d595c52a95f3::t_1c9c9384e196e3 1
+pocs/passkey-poc/apps/vault/api/src/vault-store.ts
+  s_b2d595c52a95f3::t_ca4007a1f950dc 1-72
+pocs/passkey-poc/packages/dom/src/index.ts
+  s_b2d595c52a95f3::t_08614fd2b3ce78 1-23,29,31-32
+  s_b2d595c52a95f3::t_177de98effc696 24-28,30
+pocs/passkey-poc/packages/dom/package.json
+  s_b2d595c52a95f3::t_92d4a8dff1cff6 1-7
+pocs/passkey-poc/scripts/setup.sh
+  s_b2d595c52a95f3::t_03cff5d5b6b925 1-19
+pocs/passkey-poc/bun.lock
+  s_b2d595c52a95f3::t_f1a428727e0507 1-221
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa94f48af9ea3126fbad19250f9c01edd0529831",
+  "prompts": {},
+  "sessions": {
+    "s_b2d595c52a95f3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "215e38c0-da7c-4608-8259-39066851565d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
