@@ -8,6 +8,7 @@ Agents call tools, hold credentials and read untrusted text.
 These POCs put a guard between the agent and everything it can touch.
 
 * [agent-credential-broker-mcp](pocs/agent-credential-broker-mcp/) - MCP broker that calls APIs for the agent, credentials stay in Vault or Keychain, single use intent tokens, hash chained audit
+* [mcp-output-taint-tracker](pocs/mcp-output-taint-tracker/) - Go tracker that labels tool output untrusted or secret and blocks it when it reaches a shell command, recipient, URL or issue body, decodes base64 and hex, Claude Code hook, React UI
 * [mcp-rug-pull-proxy](pocs/mcp-rug-pull-proxy/) - stdio MCP proxy that pins a SHA-256 per tool definition, blocks rug pulls and poisoned descriptions
 * [agent-prompt-injection-firewall](pocs/agent-prompt-injection-firewall/) - Go reference monitor that treats retrieved instructions as data and enforces capabilities before any tool runs
 * [agent-intent-bound-tokens](pocs/agent-intent-bound-tokens/) - Go service issuing signed one-time tokens bound to audience, action, resource, amount and deadline
