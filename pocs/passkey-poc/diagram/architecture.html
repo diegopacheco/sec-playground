@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #fffdf8; }
+  svg { display: block; }
+  text { font-family: "Caveat", cursive; fill: #1f2933; }
+  .t { font-size: 26px; font-weight: 700; }
+  .s { font-size: 19px; }
+  .l { font-size: 18px; fill: #4b5563; }
+  .box { stroke: #1f2933; stroke-width: 2.2; filter: url(#wobble); }
+  .arrow { stroke: #1f2933; stroke-width: 2.2; fill: none; marker-end: url(#head); filter: url(#wobble); }
+  .dash { stroke-dasharray: 7 6; }
+</style>
+</head>
+<body>
+<svg width="1400" height="860" viewBox="0 0 1400 860">
+  <defs>
+    <filter id="wobble" filterUnits="userSpaceOnUse" x="0" y="0" width="1400" height="860"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+    <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1f2933"/></marker>
+  </defs>
+
+  <text x="40" y="52" class="t" style="font-size:36px">Passkey POC: one Go WebAuthn server, two apps</text>
+
+  <rect x="40" y="90" width="520" height="300" rx="16" class="box" fill="#e8f1fb"/>
+  <text x="60" y="126" class="t">Browser</text>
+  <rect x="64" y="146" width="220" height="96" rx="12" class="box" fill="#fde2cf"/>
+  <text x="80" y="180" class="t">Bookstore UI</text>
+  <text x="80" y="208" class="s">Vite + TS, origin :5173</text>
+  <text x="80" y="230" class="s">token in sessionStorage</text>
+  <rect x="314" y="146" width="220" height="96" rx12="" ry="12" class="box" fill="#d4f0e4"/>
+  <text x="330" y="180" class="t">Vault UI</text>
+  <text x="330" y="208" class="s">Vite + TS, origin :5174</text>
+  <text x="330" y="230" class="s">AES key in memory only</text>
+  <rect x="64" y="266" width="470" height="100" rx="12" class="box" fill="#fff6c9"/>
+  <text x="80" y="298" class="t">Authenticator (Touch ID, phone, key)</text>
+  <text x="80" y="326" class="s">private key never leaves it, signs challenge</text>
+  <text x="80" y="350" class="s">PRF (hmac-secret) gives the vault 32 secret bytes</text>
+
+  <rect x="700" y="90" width="300" height="160" rx="16" class="box" fill="#efe7fb"/>
+  <text x="720" y="126" class="t">Vite dev proxy</text>
+  <text x="720" y="158" class="s">/passkey/* to Go /api/*</text>
+  <text x="720" y="186" class="s">/api/* to the app's Bun API</text>
+  <text x="720" y="214" class="s">same origin, no CORS</text>
+
+  <rect x="1060" y="90" width="300" height="330" rx="16" class="box" fill="#dbeafe"/>
+  <text x="1080" y="126" class="t">passkey-server (Go)</text>
+  <text x="1080" y="160" class="s">stdlib only, port 8090</text>
+  <text x="1080" y="194" class="s">CBOR decoder</text>
+  <text x="1080" y="222" class="s">COSE keys ES256 EdDSA RS256</text>
+  <text x="1080" y="250" class="s">attestation none and packed</text>
+  <text x="1080" y="278" class="s">origin, rpIdHash, UP, UV</text>
+  <text x="1080" y="306" class="s">sign count clone check</text>
+  <text x="1080" y="334" class="s">single use challenges</text>
+  <text x="1080" y="362" class="s">hashed bearer sessions</text>
+  <text x="1080" y="396" class="s">GET /api/session introspection</text>
+
+  <rect x="620" y="480" width="300" height="150" rx="16" class="box" fill="#fde2cf"/>
+  <text x="640" y="516" class="t">bookstore-api (Bun)</text>
+  <text x="640" y="548" class="s">catalog, cart, checkout</text>
+  <text x="640" y="576" class="s">prices from server only</text>
+  <text x="640" y="604" class="s">port 4001</text>
+
+  <rect x="620" y="670" width="300" height="150" rx="16" class="box" fill="#d4f0e4"/>
+  <text x="640" y="706" class="t">vault-api (Bun)</text>
+  <text x="640" y="738" class="s">stores iv + ciphertext only</text>
+  <text x="640" y="766" class="s">canary set once, uuid ids</text>
+  <text x="640" y="794" class="s">port 4002</text>
+
+  <rect x="1060" y="520" width="300" height="110" rx="16" class="box" fill="#f3f4f6"/>
+  <text x="1080" y="556" class="t">data/passkeys.json</text>
+  <text x="1080" y="588" class="s">users, COSE public keys,</text>
+  <text x="1080" y="612" class="s">sign counts, mode 0600</text>
+  <rect x="1060" y="690" width="300" height="110" rx="16" class="box" fill="#f3f4f6"/>
+  <text x="1080" y="726" class="t">data/vault.json</text>
+  <text x="1080" y="758" class="s">ciphertext blobs per user,</text>
+  <text x="1080" y="782" class="s">no key, no plaintext</text>
+
+  <path d="M560 170 L696 170" class="arrow"/>
+  <text x="590" y="160" class="l">fetch</text>
+  <path d="M1000 160 L1056 160" class="arrow"/>
+  
+  <path d="M850 250 C 850 330, 790 400, 770 476" class="arrow"/>
+  <text x="820" y="380" class="l">/api bookstore</text>
+  <path d="M700 230 C 520 430, 560 640, 616 740" class="arrow"/>
+  <text x="520" y="560" class="l">/api vault</text>
+  <path d="M920 540 C 990 480, 1010 420, 1056 380" class="arrow dash"/>
+  <path d="M920 730 C 1000 640, 1020 470, 1060 400" class="arrow dash"/>
+  <text x="940" y="470" class="l">introspect token</text>
+  <path d="M1210 420 L1210 516" class="arrow"/>
+  <path d="M920 745 L1056 745" class="arrow"/>
+</svg>
+</body>
+</html>

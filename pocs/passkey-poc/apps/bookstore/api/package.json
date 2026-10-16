@@ -1,0 +1,8 @@
+{
+  "name": "@passkey/bookstore-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "bun src/server.ts", "test": "bun test" },
+  "dependencies": { "@passkey/session-guard": "workspace:*" }
+}

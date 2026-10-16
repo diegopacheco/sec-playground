@@ -1,0 +1,9 @@
+{
+  "name": "@passkey/bookstore-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "vite build", "test": "bun test" },
+  "dependencies": { "@passkey/passkey-client": "workspace:*", "@passkey/dom": "workspace:*" },
+  "devDependencies": { "vite": "8.3.4" }
+}
